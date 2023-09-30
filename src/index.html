@@ -1,13 +1,90 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>InnovaTotemFront</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
-  <app-root></app-root>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <script type="application/javascript" src="./assets/js/vendor.js"></script>
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /> -->
+    <base href="/" />
+    <meta charset="utf-8" />
+    <title>TOTEM</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <!-- <base href="." /> -->
+    <!-- Place favicon.ico in the root directory -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- Theme initialization -->
+    <link
+      rel="stylesheet"
+      id="theme-style"
+      type="text/css"
+      href="./assets/css/app.css"
+    />
+    <link rel="stylesheet" type="text/css" href="./assets/css/vendor.css" />
+  </head>
+  <body id="mainHCE">
+    <app-root></app-root>
+    <script type="application/javascript" src="./assets/js/app.js"></script>
+    <!-- Tooltip -->
+    <!-- <script type="text/javascript">
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
+    <!-- Popover -->
+    <script type="text/javascript">
+      $(function () {
+        $('[data-toggle="popover"]').popover({
+          html: true,
+        });
+      });
+    </script>
+    <!-- Popover-custom -->
+    <script type="text/javascript">
+      $(function () {
+        $('[data-toggle="popover-custom"]').popover({
+          html: true,
+        });
+        $('[data-toggle="popover-custom"]').on(
+          "show.bs.popover",
+          function (e, a) {
+            let div = $(this).data("bs.popover").tip;
+            $(div).addClass("popover-custom");
+          }
+        );
+      });
+      // PopOver Generacion masiva de agendas ////////////////////////////////
+      $("#popRangoFechaBtn").popover({
+        html: true,
+        content: function () {
+          return $("#popRangoFecha").html();
+        },
+      });
+      ////////////////////////////////////////////////////////////////////////
+      // Dismiss popover click outside ///////////////////////////////////////
+      $("body").on("click", function (e) {
+        $("[data-toggle=popover]").each(function () {
+          // hide any open popovers when the anywhere else in the body is clicked
+          if (
+            !$(this).is(e.target) &&
+            $(this).has(e.target).length === 0 &&
+            $(".popover").has(e.target).length === 0
+          ) {
+            $(this).popover("hide");
+          }
+        });
+      });
+      ////////////////////////////////////////////////////////////////////////
+    </script>
+    <!-- Modal -->
+    <script type="text/javascript">
+      $("#myModal").on("shown.bs.modal", function () {
+        $("#myInput").focus();
+      });
+    </script>
+    -->
+  </body>
 </html>
