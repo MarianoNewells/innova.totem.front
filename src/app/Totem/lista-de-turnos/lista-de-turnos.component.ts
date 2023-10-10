@@ -35,6 +35,7 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
   idCentroDeAtencion: string = '';
   numeros: FormGroup;
   pdfurl: string = '';
+  modalRef:any
   constructor(
     private api: ApisBackEndService,
     private router: Router,
@@ -126,11 +127,24 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
       .get('./assets/reportePdf.txt', { responseType: 'text' })
       .subscribe((data) => {
         var blob = new Blob([this._base64ToArrayBuffer(data)], {
-          type: 'application/doc',
+          type: 'application/pdf',
         });
         this.pdfurl = URL.createObjectURL(blob);
-        const modalRef = this.modalService.open(ModalTicketComponent, { ariaLabelledBy: 'modal-basic-title',size: 'lg', centered: true });
-        modalRef.componentInstance.data=this.pdfurl
+        this.modalRef = this.modalService.open(ModalTicketComponent, { size: 'lg', centered: true });
+        this.modalRef.componentInstance.data=this.pdfurl
+        
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = this.pdfurl;
+        document.body.appendChild(iframe);
+        if(iframe!=null) {
+         // iframe.contentWindow.print();
+        }
+    
+        
+        setTimeout(() => {
+           this.modalRef.close()
+        }, 3000);
       });
   }
 
