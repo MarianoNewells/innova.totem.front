@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FechasDeNacientoComponent } from './Totem/fechas-de-naciento/fechas-de-naciento.component';
 import { SeleccionDeTramiteComponent } from './Totem/seleccion-de-tramite/seleccion-de-tramite.component';
 import { ListaDeTurnosComponent } from './Totem/lista-de-turnos/lista-de-turnos.component';
+import { ModalTicketComponent } from './Totem/modales/modal-ticket/modal-ticket.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { ListaDeTurnosComponent } from './Totem/lista-de-turnos/lista-de-turnos.
     FechasDeNacientoComponent,
     SeleccionDeTramiteComponent,
     ListaDeTurnosComponent,
+    ModalTicketComponent,
   ],
   imports: [
     BrowserModule,

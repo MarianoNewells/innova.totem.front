@@ -13,7 +13,9 @@ import { Persona } from '../modelos/dni';
 import { Turno, Turnos } from '../modelos/turnos';
 import { FormControl, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'; // import
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalTicketComponent } from '../modales/modal-ticket/modal-ticket.component';
+
 
 @Component({
   selector: 'app-lista-de-turnos',
@@ -38,7 +40,7 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     private router: Router,
     private alert: AlertService,
     private http: HttpClient,
-    private sanitizer: DomSanitizer // private modalservice: NgbModal
+    private modalService: NgbModal
   ) {
     this.numeros = new FormGroup({
       token: new FormControl(''),
@@ -127,7 +129,8 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
           type: 'application/doc',
         });
         this.pdfurl = URL.createObjectURL(blob);
-        // this.modalservice.open(this.modalTicketAutorecepcionOk, { size: 'lg' });
+        const modalRef = this.modalService.open(ModalTicketComponent, { size: 'lg' });
+        modalRef.componentInstance.data=this.pdfurl
         //sessionStorage.setItem('pdfurl', this.pdfurl);
         //this.router.navigate(['visorPdf']);
       });
