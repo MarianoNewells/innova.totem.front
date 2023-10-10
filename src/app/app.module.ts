@@ -10,6 +10,7 @@ import { FechasDeNacientoComponent } from './Totem/fechas-de-naciento/fechas-de-
 import { SeleccionDeTramiteComponent } from './Totem/seleccion-de-tramite/seleccion-de-tramite.component';
 import { ListaDeTurnosComponent } from './Totem/lista-de-turnos/lista-de-turnos.component';
 import { ModalTicketComponent } from './Totem/modales/modal-ticket/modal-ticket.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ModalTicketComponent } from './Totem/modales/modal-ticket/modal-ticket.
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    PdfViewerModule
   ],
   providers: [],
   bootstrap: [AppComponent],

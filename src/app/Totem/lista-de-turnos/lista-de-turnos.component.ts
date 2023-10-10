@@ -129,10 +129,8 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
           type: 'application/doc',
         });
         this.pdfurl = URL.createObjectURL(blob);
-        const modalRef = this.modalService.open(ModalTicketComponent, { size: 'lg' });
+        const modalRef = this.modalService.open(ModalTicketComponent, { ariaLabelledBy: 'modal-basic-title',size: 'lg', centered: true });
         modalRef.componentInstance.data=this.pdfurl
-        //sessionStorage.setItem('pdfurl', this.pdfurl);
-        //this.router.navigate(['visorPdf']);
       });
   }
 
@@ -154,5 +152,9 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     setInterval(() => {
       this.hora = new Date();
     }, 1000);
+  }
+
+  salir(){
+   
   }
 }
