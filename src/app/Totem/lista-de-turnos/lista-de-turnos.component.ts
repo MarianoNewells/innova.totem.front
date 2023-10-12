@@ -15,7 +15,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalTicketComponent } from '../modales/modal-ticket/modal-ticket.component';
-import { DomSanitizer } from '@angular/platform-browser';
+import * as FileSaver from 'file-saver';
 
 
 @Component({
@@ -43,7 +43,6 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     private alert: AlertService,
     private http: HttpClient,
     private modalService: NgbModal,
-    private sanitizer: DomSanitizer
   ) {
     this.numeros = new FormGroup({
       token: new FormControl(''),
@@ -132,10 +131,20 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
           type: 'application/pdf',
         });
         this.pdfurl = URL.createObjectURL(blob);
-        window.open(this.pdfurl)
+        //FileSaver.saveAs(blob, this.pdfurl);
+        // const printerWindow = window.open(this.pdfurl)
+        // if(printerWindow!=null){
+        //   printerWindow.document.close();
+        //   printerWindow.focus();
+        //   printerWindow.print();
+        // }
+   
         this.modalRef = this.modalService.open(ModalTicketComponent, { size: 'lg', centered: true });
         this.modalRef.componentInstance.data=this.pdfurl
-       
+    
+         setTimeout(() => {
+          window.close()
+        }, 1000);
     
 
         // setTimeout(() => {
