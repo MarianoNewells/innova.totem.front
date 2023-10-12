@@ -27,7 +27,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    PdfViewerModule
+    PdfViewerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

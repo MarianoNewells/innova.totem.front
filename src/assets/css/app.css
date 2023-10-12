@@ -2888,7 +2888,7 @@ tips-input-select-multiple
 
 @font-face {
   font-family: fontInnova;
-  src: url(../assets/fonts/fontinnova.eot);
+  src: url(./assets/fonts/fontinnova.eot);
   src: url(./assets/fonts/fontinnova.woff) format("woff"),
     url(./assets/fonts/fontinnova.ttf) format("truetype");
   font-weight: 400;

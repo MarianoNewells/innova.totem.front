@@ -15,6 +15,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalTicketComponent } from '../modales/modal-ticket/modal-ticket.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 @Component({
@@ -41,7 +42,8 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     private router: Router,
     private alert: AlertService,
     private http: HttpClient,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private sanitizer: DomSanitizer
   ) {
     this.numeros = new FormGroup({
       token: new FormControl(''),
@@ -130,21 +132,42 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
           type: 'application/pdf',
         });
         this.pdfurl = URL.createObjectURL(blob);
+        window.open(this.pdfurl)
         this.modalRef = this.modalService.open(ModalTicketComponent, { size: 'lg', centered: true });
         this.modalRef.componentInstance.data=this.pdfurl
-        
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = this.pdfurl;
-        document.body.appendChild(iframe);
-        if(iframe!=null) {
-         // iframe.contentWindow.print();
-        }
+       
     
+
+        // setTimeout(() => {
+        //     var a         = document.createElement('a');
+        //   a.href        = this.pdfurl
+        //   a.target      = '_blank';
+        //   a.download    = 'ticket1.pdf';
+        //   document.body.appendChild(a);
+        //   a.click();
+        //   a.remove()
+        // }, 3000);
+  
+       
+      // const fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+
+
+      // let pdfpath = this.pdfurl.substring(5)+".pdf"
+
+      //  console.log(fileUrl)
+        // C:\\Users\\MARIA\\Downloads\\ticket1.pdf
         
-        setTimeout(() => {
-           this.modalRef.close()
-        }, 3000);
+        //const downloadsFolder = require('downloads-folder');
+
+      
+
+        // this.api.getImprimir("C:\\Users\\MARIA\\Downloads\\ticket1.pdf","Microsoft Print to PDF").subscribe((data)=>{
+        //   console.log(data)
+        // })
+       
+        // setTimeout(() => {
+        //    this.modalRef.close()
+        // }, 3000);
       });
   }
 
