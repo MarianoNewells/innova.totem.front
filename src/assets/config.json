@@ -1,5 +1,7 @@
 {
   "server": {
-    "urlBase": "http://localhost:13503/api/PantallaAutoGestion/"
+    "urlBase": "http://localhost:13503/api/PantallaAutoGestion/",
+    "carpetaDeDescargas": "C:\\Users\\MARIA\\Downloads\\",
+    "defaultPrinter":"Microsoft Print to PDF"
   }
 }
