@@ -60,6 +60,7 @@ export class ListaDeEstudiosComponent implements OnInit{
 
   verEstudio(index:number){
     const idEstudio = this.estudios.Estudios[index].id
+    const nombreEstudio = this.estudios.Estudios[index].NombreEstudio
     this.api.getInforme(idEstudio).subscribe((data)=>{
       var blob = new Blob([this._base64ToArrayBuffer(data.Informe)], {
         type: 'application/pdf',
@@ -67,6 +68,12 @@ export class ListaDeEstudiosComponent implements OnInit{
       const pdfurl = URL.createObjectURL(blob);
       this.modalRef = this.modalService.open(ModalInformeComponent, { size: 'lg', centered: true });
       this.modalRef.componentInstance.data=pdfurl
+      this.modalRef.componentInstance.nombreCompleto=this.nombreCompleto
+      this.modalRef.componentInstance.ref = this.modalRef
+      this.modalRef.componentInstance.nombreEstudio = nombreEstudio.substring(0,60)
+      setInterval(() => {
+        this.modalRef.close()
+      }, 60000);
     })
   }
 
