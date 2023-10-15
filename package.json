@@ -22,6 +22,7 @@
     "@types/file-saver": "^2.0.5",
     "file-saver": "^2.0.5",
     "ng2-pdf-viewer": "^7.0.0",
+    "ngx-extended-pdf-viewer": "^18.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

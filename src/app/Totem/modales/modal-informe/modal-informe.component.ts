@@ -7,4 +7,11 @@ import { Component, Input } from '@angular/core';
 })
 export class ModalInformeComponent {
   @Input() data: string=""
+  @Input() nombreCompleto: string=""
+  @Input() ref: any
+  @Input() nombreEstudio: string=""
+
+  cerrar(){
+    this.ref.close()
+  }
 }

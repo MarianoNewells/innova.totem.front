@@ -1,16 +1,34 @@
-<div class="modal-dialog modal-lg">
+<!-- <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Informe</h5>
       </div>
         <div>
-            <pdf-viewer [src]="data"
-                         [render-text]="true"
-                         [rotation]="0"
-                         [fit-to-page]="true"
-                         [original-size]="true"
-                         [show-all]="true"
-                         ></pdf-viewer>
+          <ngx-extended-pdf-viewer [src]="data"></ngx-extended-pdf-viewer>
+        </div>
+    </div>
+</div> -->
+
+
+	<!-- <div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Imforme</h4>
+		<button type="button" class="btn-close" aria-label="Close" ></button>
+	</div>
+	<div class="modal-body">
+		<ngx-extended-pdf-viewer [src]="data"></ngx-extended-pdf-viewer>
+	</div> -->
+
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Estudio: {{nombreEstudio}}</h5>
+        <button style="width:30px;height: 30px" type="button" class="btn btn-outline-primary"
+        (click)="cerrar()"  >X</button>
+      </div>
+        <div  style="width: 100%; height: 80vh">
+          <ngx-extended-pdf-viewer [src]="data"></ngx-extended-pdf-viewer>
         </div>
     </div>
 </div>
+	
+

@@ -13,6 +13,7 @@ import { ModalTicketComponent } from './Totem/modales/modal-ticket/modal-ticket.
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ListaDeEstudiosComponent } from './Totem/lista-de-estudios/lista-de-estudios.component';
 import { ModalInformeComponent } from './Totem/modales/modal-informe/modal-informe.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { ModalInformeComponent } from './Totem/modales/modal-informe/modal-infor
     ReactiveFormsModule,
     HttpClientModule,
     PdfViewerModule,
+    NgxExtendedPdfViewerModule
   ],
   providers: [],
   bootstrap: [AppComponent],
