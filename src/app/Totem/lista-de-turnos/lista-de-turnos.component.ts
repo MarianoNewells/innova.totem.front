@@ -133,7 +133,6 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
         });
         this.pdfurl = URL.createObjectURL(blob);
         let fileName: string = Math.floor(Math.random() * Date.now()).toString(16) + ".pdf"
-        console.log(fileName)
         FileSaver.saveAs(blob, fileName);
         const path:string = conf.server.carpetaDeDescargas+fileName
         
@@ -145,39 +144,10 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
        
         this.modalRef = this.modalService.open(ModalTicketComponent, { size: 'lg', centered: true });
         this.modalRef.componentInstance.data=this.pdfurl
-       
-    
-
-        // setTimeout(() => {
-        //     var a         = document.createElement('a');
-        //   a.href        = this.pdfurl
-        //   a.target      = '_blank';
-        //   a.download    = 'ticket1.pdf';
-        //   document.body.appendChild(a);
-        //   a.click();
-        //   a.remove()
-        // }, 3000);
-  
-       
-      // const fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
-
-
-      // let pdfpath = this.pdfurl.substring(5)+".pdf"
-
-      //  console.log(fileUrl)
-        // C:\\Users\\MARIA\\Downloads\\ticket1.pdf
         
-        //const downloadsFolder = require('downloads-folder');
-
-      
-
-        // this.api.getImprimir("C:\\Users\\MARIA\\Downloads\\ticket1.pdf","Microsoft Print to PDF").subscribe((data)=>{
-        //   console.log(data)
-        // })
-       
-        // setTimeout(() => {
-        //    this.modalRef.close()
-        // }, 3000);
+         setTimeout(() => {
+           this.modalRef.close()
+        }, 3000);
       });
   }
 
