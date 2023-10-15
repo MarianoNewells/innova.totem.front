@@ -60,6 +60,11 @@ export class SeleccionDeTramiteComponent implements OnInit, AfterViewInit {
         this.router.navigate(['listaDeTurnos']);
         break;
       case 25: // Consulta de estudios
+        sessionStorage.setItem(
+          'nodoListaDeEstudios',
+          JSON.stringify(this.tramites[index])
+        );
+        this.router.navigate(['listaDeEstudios']);
         break;
     }
   }

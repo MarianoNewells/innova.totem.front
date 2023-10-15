@@ -11,6 +11,8 @@ import { SeleccionDeTramiteComponent } from './Totem/seleccion-de-tramite/selecc
 import { ListaDeTurnosComponent } from './Totem/lista-de-turnos/lista-de-turnos.component';
 import { ModalTicketComponent } from './Totem/modales/modal-ticket/modal-ticket.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { ListaDeEstudiosComponent } from './Totem/lista-de-estudios/lista-de-estudios.component';
+import { ModalInformeComponent } from './Totem/modales/modal-informe/modal-informe.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     SeleccionDeTramiteComponent,
     ListaDeTurnosComponent,
     ModalTicketComponent,
+    ListaDeEstudiosComponent,
+    ModalInformeComponent,
   ],
   imports: [
     BrowserModule,

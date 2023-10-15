@@ -5,6 +5,7 @@ import { DniComponent } from './Totem/dni/dni.component';
 import { FechasDeNacientoComponent } from './Totem/fechas-de-naciento/fechas-de-naciento.component';
 import { SeleccionDeTramiteComponent } from './Totem/seleccion-de-tramite/seleccion-de-tramite.component';
 import { ListaDeTurnosComponent } from './Totem/lista-de-turnos/lista-de-turnos.component';
+import { ListaDeEstudiosComponent } from './Totem/lista-de-estudios/lista-de-estudios.component';
 
 const routes: Routes = [
   { path: '', component: BienvenidaComponent },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'fechasDeNacimiento', component: FechasDeNacientoComponent },
   { path: 'seleccionDeTramite', component: SeleccionDeTramiteComponent },
   { path: 'listaDeTurnos', component: ListaDeTurnosComponent },
+  { path: 'listaDeEstudios', component: ListaDeEstudiosComponent },
 ];
 
 @NgModule({

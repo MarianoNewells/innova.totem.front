@@ -8,6 +8,8 @@ import { NodoRaiz } from '../modelos/nodoRaiz';
 import { NodosHijos } from '../modelos/nodosHijos';
 import { Turnos } from '../modelos/turnos';
 import { Autorecepcion } from '../modelos/autorecepcion';
+import { Estudios } from '../modelos/estudios';
+import { Informe } from '../modelos/informe';
 
 @Injectable({
   providedIn: 'root',
@@ -98,5 +100,26 @@ export class ApisBackEndService {
       params: params,
     };
     return this.http.get<any>(endPoint, httpOptions);
+  }
+  getEstudios(idPersona: number) {
+    const endPoint = this.urlBase + 'ConsultarEstudios';
+    let params = new HttpParams();
+    params = params.append('idPersona', idPersona);
+    let httpOptions = {
+      headers: this.basicHeader,
+      params: params,
+    };
+    return this.http.get<Estudios>(endPoint, httpOptions);
+  }
+
+  getInforme(idInforme: number) {
+    const endPoint = this.urlBase + 'ObtenerInforme';
+    let params = new HttpParams();
+    params = params.append('idInforme', idInforme);
+    let httpOptions = {
+      headers: this.basicHeader,
+      params: params,
+    };
+    return this.http.get<Informe>(endPoint, httpOptions);
   }
 }
