@@ -18,6 +18,7 @@ import { SpinnerComponent } from './Totem/spinner/spinner.component';
 import { HTTP_INTERCEPTORS  } from '@angular/common/http'
 import { SpinnerInterceptor } from './Totem/servicios/interceptor';
 
+
 @NgModule({
   declarations: [
     AppComponent,
