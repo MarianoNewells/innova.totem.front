@@ -172,6 +172,6 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
   }
 
   salir(){
-   
+    this.router.navigate(['/']);
   }
 }

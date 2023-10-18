@@ -99,7 +99,7 @@ export class ListaDeEstudiosComponent implements OnInit{
   }
 
   salir(){
-
+    this.router.navigate(['/']);
   }
 
 }

@@ -14,6 +14,9 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ListaDeEstudiosComponent } from './Totem/lista-de-estudios/lista-de-estudios.component';
 import { ModalInformeComponent } from './Totem/modales/modal-informe/modal-informe.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { SpinnerComponent } from './Totem/spinner/spinner.component';
+import { HTTP_INTERCEPTORS  } from '@angular/common/http'
+import { SpinnerInterceptor } from './Totem/servicios/interceptor';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
     ModalTicketComponent,
     ListaDeEstudiosComponent,
     ModalInformeComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,7 +39,11 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
     PdfViewerModule,
     NgxExtendedPdfViewerModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: SpinnerInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
