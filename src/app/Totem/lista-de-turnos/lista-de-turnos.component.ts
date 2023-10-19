@@ -17,6 +17,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalTicketComponent } from '../modales/modal-ticket/modal-ticket.component';
 import * as FileSaver from 'file-saver';
 import { default as conf } from 'src/assets/config.json';
+import { RecepcionExitosaComponent } from '../recepcion-exitosa/recepcion-exitosa.component';
 
 
 @Component({
@@ -118,36 +119,51 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     let el: HTMLElement = this.CloseModalToken.nativeElement;
     el.click();
 
-    // Disparar proceso de autorecepcion.
+    //Disparar proceso de autorecepcion.
     // this.api.getAutorecepcion(this.turno.idTurno, token).subscribe((data) => {
-    //   console.log(data);
-    //   if (data.Exito) {
-    //     console.log(data.ReporteTicketString);
+    //    if (data.Exito) {
+    //     var blob = new Blob([this._base64ToArrayBuffer(data.ReporteTicketString)], {
+    //       type: 'application/pdf',
+    //     });
+    //     this.pdfurl = URL.createObjectURL(blob);
+    //     let fileName: string = Math.floor(Math.random() * Date.now()).toString(16) + ".pdf"
+    //     FileSaver.saveAs(blob, fileName);
+    //     const path:string = conf.server.carpetaDeDescargas+fileName
+        
+    //     setTimeout(() => {
+    //       this.api.getImprimir(path,conf.server.defaultPrinter).subscribe((data)=>{
+    //       })
+    //     }, 500);
+       
+    //     this.router.navigate(['recepcionExitosa']);
     //   }
     // });
+
     this.http
       .get('./assets/reportePdf.txt', { responseType: 'text' })
       .subscribe((data) => {
-        var blob = new Blob([this._base64ToArrayBuffer(data)], {
-          type: 'application/pdf',
-        });
-        this.pdfurl = URL.createObjectURL(blob);
-        let fileName: string = Math.floor(Math.random() * Date.now()).toString(16) + ".pdf"
-        FileSaver.saveAs(blob, fileName);
-        const path:string = conf.server.carpetaDeDescargas+fileName
+          var blob = new Blob([this._base64ToArrayBuffer(data)], {
+            type: 'application/pdf',
+          });
+          this.pdfurl = URL.createObjectURL(blob);
+          let fileName: string = Math.floor(Math.random() * Date.now()).toString(16) + ".pdf"
+          FileSaver.saveAs(blob, fileName);
+          const path:string = conf.server.carpetaDeDescargas+fileName
+          
+          setTimeout(() => {
+            this.api.getImprimir(path,conf.server.defaultPrinter).subscribe((data)=>{
+              console.log(data)
+            })
+          }, 500);
         
-        setTimeout(() => {
-          this.api.getImprimir(path,conf.server.defaultPrinter).subscribe((data)=>{
-            console.log(data)
-          })
-        }, 500);
-       
-        this.modalRef = this.modalService.open(ModalTicketComponent, { size: 'lg', centered: true });
+        this.modalRef = this.modalService.open(RecepcionExitosaComponent, { size: 'lg', centered: true });
         this.modalRef.componentInstance.data=this.pdfurl
-        
-         setTimeout(() => {
-           this.modalRef.close()
-        }, 3000);
+
+        setTimeout(() => {
+          this.modalRef.close()
+          }, 10000);
+
+        this.router.navigate(['/']);
       });
   }
 
@@ -175,3 +191,4 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/']);
   }
 }
+

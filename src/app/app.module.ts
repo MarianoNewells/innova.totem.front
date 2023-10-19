@@ -17,6 +17,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { SpinnerComponent } from './Totem/spinner/spinner.component';
 import { HTTP_INTERCEPTORS  } from '@angular/common/http'
 import { SpinnerInterceptor } from './Totem/servicios/interceptor';
+import { RecepcionExitosaComponent } from './Totem/recepcion-exitosa/recepcion-exitosa.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { SpinnerInterceptor } from './Totem/servicios/interceptor';
     ListaDeEstudiosComponent,
     ModalInformeComponent,
     SpinnerComponent,
+    RecepcionExitosaComponent,
   ],
   imports: [
     BrowserModule,
