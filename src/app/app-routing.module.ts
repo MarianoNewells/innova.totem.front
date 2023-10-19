@@ -7,6 +7,7 @@ import { SeleccionDeTramiteComponent } from './Totem/seleccion-de-tramite/selecc
 import { ListaDeTurnosComponent } from './Totem/lista-de-turnos/lista-de-turnos.component';
 import { ListaDeEstudiosComponent } from './Totem/lista-de-estudios/lista-de-estudios.component';
 import { RecepcionExitosaComponent } from './Totem/recepcion-exitosa/recepcion-exitosa.component';
+import { ListaDeCoberturasComponent } from './Totem/lista-de-coberturas/lista-de-coberturas.component';
 
 const routes: Routes = [
   { path: '', component: BienvenidaComponent },
@@ -16,7 +17,7 @@ const routes: Routes = [
   { path: 'seleccionDeTramite', component: SeleccionDeTramiteComponent },
   { path: 'listaDeTurnos', component: ListaDeTurnosComponent },
   { path: 'listaDeEstudios', component: ListaDeEstudiosComponent },
-  { path: 'recepcionExitosa', component: RecepcionExitosaComponent },
+  { path: 'listaDeCoberturas', component: ListaDeCoberturasComponent },
 ];
 
 @NgModule({

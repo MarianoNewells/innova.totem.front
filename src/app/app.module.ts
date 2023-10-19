@@ -18,6 +18,7 @@ import { SpinnerComponent } from './Totem/spinner/spinner.component';
 import { HTTP_INTERCEPTORS  } from '@angular/common/http'
 import { SpinnerInterceptor } from './Totem/servicios/interceptor';
 import { RecepcionExitosaComponent } from './Totem/recepcion-exitosa/recepcion-exitosa.component';
+import { ListaDeCoberturasComponent } from './Totem/lista-de-coberturas/lista-de-coberturas.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { RecepcionExitosaComponent } from './Totem/recepcion-exitosa/recepcion-e
     ModalInformeComponent,
     SpinnerComponent,
     RecepcionExitosaComponent,
+    ListaDeCoberturasComponent,
   ],
   imports: [
     BrowserModule,

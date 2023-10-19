@@ -10,6 +10,7 @@ import { Turnos } from '../modelos/turnos';
 import { Autorecepcion } from '../modelos/autorecepcion';
 import { Estudios } from '../modelos/estudios';
 import { Informe } from '../modelos/informe';
+import { Coberturas } from '../modelos/coberturas';
 
 @Injectable({
   providedIn: 'root',
@@ -121,5 +122,16 @@ export class ApisBackEndService {
       params: params,
     };
     return this.http.get<Informe>(endPoint, httpOptions);
+  }
+
+  getCoberturas(idPersona: number) {
+    const endPoint = this.urlBase + 'ObtenerCoberturasDelPaciente';
+    let params = new HttpParams();
+    params = params.append('idPersona', idPersona);
+    let httpOptions = {
+      headers: this.basicHeader,
+      params: params,
+    };
+    return this.http.get<Coberturas>(endPoint, httpOptions);
   }
 }
