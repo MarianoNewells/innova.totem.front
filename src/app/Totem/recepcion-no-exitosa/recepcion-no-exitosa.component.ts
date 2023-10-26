@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-recepcion-exitosa',
-  templateUrl: './recepcion-exitosa.component.html',
-  styleUrls: ['./recepcion-exitosa.component.css']
+  selector: 'app-recepcion-no-exitosa',
+  templateUrl: './recepcion-no-exitosa.component.html',
+  styleUrls: ['./recepcion-no-exitosa.component.css']
 })
-export class RecepcionExitosaComponent implements OnInit {
-
+export class RecepcionNoExitosaComponent implements OnInit{
   ngOnInit(): void {
     this.mostrarHora()
   }
@@ -17,5 +16,4 @@ export class RecepcionExitosaComponent implements OnInit {
       this.hora = new Date();
     }, 1000);
   }
-
 }

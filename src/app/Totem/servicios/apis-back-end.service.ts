@@ -11,6 +11,7 @@ import { Autorecepcion } from '../modelos/autorecepcion';
 import { Estudios } from '../modelos/estudios';
 import { Informe } from '../modelos/informe';
 import { Coberturas } from '../modelos/coberturas';
+import { TicketRecepcionista } from '../modelos/ticketRecepcionista';
 
 @Injectable({
   providedIn: 'root',
@@ -122,5 +123,15 @@ export class ApisBackEndService {
       params: params,
     };
     return this.http.get<Coberturas>(endPoint, httpOptions);
+  }
+  getTicketRecepcionista(idTurno: number) {
+    const endPoint = this.urlBase + 'ObtenerTicketRecepcionista';
+    let params = new HttpParams();
+    params = params.append('IdTurno', idTurno);
+    let httpOptions = {
+      headers: this.basicHeader,
+      params: params,
+    };
+    return this.http.get<TicketRecepcionista>(endPoint, httpOptions);
   }
 }

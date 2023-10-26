@@ -18,6 +18,7 @@ import { ModalTicketComponent } from '../modales/modal-ticket/modal-ticket.compo
 import * as FileSaver from 'file-saver';
 import { default as conf } from 'src/assets/config.json';
 import { RecepcionExitosaComponent } from '../recepcion-exitosa/recepcion-exitosa.component';
+import { RecepcionNoExitosaComponent } from '../recepcion-no-exitosa/recepcion-no-exitosa.component';
 
 
 @Component({
@@ -103,14 +104,36 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
   autorecepcion(index: number) {
     this.turno = this.turnos.Turnos[index];
     if(!this.turno.AceptaAutogestion){
-      console.log(this.turno.idTurno)
-      return
+       // Cerrar el modal del token.
+      let el: HTMLElement = this.CloseModalToken.nativeElement;
+      el.click();
+      this.api.getTicketRecepcionista(this.turno.idTurno).subscribe((data)=>{
+        if(data.Exito){
+          var blob = new Blob([this._base64ToArrayBuffer(data.ReporteTicketRecepcionistaString)], {
+            type: 'application/pdf',
+          });
+          this.pdfurl = URL.createObjectURL(blob);
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          iframe.src = this.pdfurl;
+          document.body.appendChild(iframe);
+          if(iframe.contentWindow!=null){
+            iframe.contentWindow.print();
+          }
+          this.modalRef = this.modalService.open(RecepcionNoExitosaComponent, { size: 'lg', centered: true });
+        
+          setTimeout(() => {
+            this.modalRef.close()
+            }, 15000);
+  
+          //this.router.navigate(['/']);
+        }
+      })
+     
     }
   }
 
   aceptar() {
-
-
     let token = this.numeros.get('token')?.value;
     if (token == '') {
       this.alert.mostrarAlerta(
@@ -126,38 +149,12 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     el.click();
 
     //Disparar proceso de autorecepcion.
-    this.api.getAutorecepcion(this.turno.idTurno, token).subscribe((data) => {
-       if (data.Exito) {
-        var blob = new Blob([this._base64ToArrayBuffer(data.ReporteTicketString)], {
-          type: 'application/pdf',
-        });
-        this.pdfurl = URL.createObjectURL(blob);
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = this.pdfurl;
-        document.body.appendChild(iframe);
-        if(iframe.contentWindow!=null){
-          iframe.contentWindow.print();
-        }
-         
-        this.modalRef = this.modalService.open(RecepcionExitosaComponent, { size: 'lg', centered: true });
-        
-        setTimeout(() => {
-          this.modalRef.close()
-          }, 15000);
-
-        this.router.navigate(['/']);
-      }
-    });
-
-    // this.http
-    //   .get('./assets/reportePdf.txt', { responseType: 'text' })
-    //   .subscribe((data) => {
-    //       var blob = new Blob([this._base64ToArrayBuffer(data)], {
-    //         type: 'application/pdf',
-    //       });
-    //       this.pdfurl = URL.createObjectURL(blob);
-
+    // this.api.getAutorecepcion(this.turno.idTurno, token).subscribe((data) => {
+    //    if (data.Exito) {
+    //     var blob = new Blob([this._base64ToArrayBuffer(data.ReporteTicketString)], {
+    //       type: 'application/pdf',
+    //     });
+    //     this.pdfurl = URL.createObjectURL(blob);
     //     const iframe = document.createElement('iframe');
     //     iframe.style.display = 'none';
     //     iframe.src = this.pdfurl;
@@ -173,7 +170,33 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     //       }, 15000);
 
     //     this.router.navigate(['/']);
-    //   });
+    //   }
+    // });
+
+    this.http
+      .get('./assets/reportePdf.txt', { responseType: 'text' })
+      .subscribe((data) => {
+          var blob = new Blob([this._base64ToArrayBuffer(data)], {
+            type: 'application/pdf',
+          });
+          this.pdfurl = URL.createObjectURL(blob);
+
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = this.pdfurl;
+        document.body.appendChild(iframe);
+        if(iframe.contentWindow!=null){
+          iframe.contentWindow.print();
+        }
+         
+        this.modalRef = this.modalService.open(RecepcionExitosaComponent, { size: 'lg', centered: true });
+        
+        setTimeout(() => {
+          this.modalRef.close()
+          }, 15000);
+          
+        //this.router.navigate(['/']);
+      });
   }
 
   _base64ToArrayBuffer(base64: string) {

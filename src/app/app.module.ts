@@ -20,6 +20,7 @@ import { SpinnerInterceptor } from './Totem/servicios/interceptor';
 import { RecepcionExitosaComponent } from './Totem/recepcion-exitosa/recepcion-exitosa.component';
 import { ListaDeCoberturasComponent } from './Totem/lista-de-coberturas/lista-de-coberturas.component';
 import {NgxPrintModule} from 'ngx-print';
+import { RecepcionNoExitosaComponent } from './Totem/recepcion-no-exitosa/recepcion-no-exitosa.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import {NgxPrintModule} from 'ngx-print';
     SpinnerComponent,
     RecepcionExitosaComponent,
     ListaDeCoberturasComponent,
+    RecepcionNoExitosaComponent,
   ],
   imports: [
     BrowserModule,
