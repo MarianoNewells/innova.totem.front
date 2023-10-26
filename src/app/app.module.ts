@@ -19,7 +19,7 @@ import { HTTP_INTERCEPTORS  } from '@angular/common/http'
 import { SpinnerInterceptor } from './Totem/servicios/interceptor';
 import { RecepcionExitosaComponent } from './Totem/recepcion-exitosa/recepcion-exitosa.component';
 import { ListaDeCoberturasComponent } from './Totem/lista-de-coberturas/lista-de-coberturas.component';
-
+import {NgxPrintModule} from 'ngx-print';
 
 @NgModule({
   declarations: [
@@ -42,7 +42,8 @@ import { ListaDeCoberturasComponent } from './Totem/lista-de-coberturas/lista-de
     ReactiveFormsModule,
     HttpClientModule,
     PdfViewerModule,
-    NgxExtendedPdfViewerModule
+    NgxExtendedPdfViewerModule,
+    NgxPrintModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

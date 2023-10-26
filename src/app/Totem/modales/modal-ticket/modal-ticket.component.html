@@ -3,8 +3,9 @@
       <div class="modal-header">
         <h5 class="modal-title">Imprimiendo ticket</h5>
       </div>
-        <div class="modal-body no-scroll" style="width: 100%; height: 50vh">
-            <pdf-viewer [src]="data"
+        <div id="impresion" class="modal-body no-scroll" style="width: 100%; height: 50vh">
+            <pdf-viewer 
+                        [src]="data"
                          [render-text]="true"
                          [rotation]="0"
                          [fit-to-page]="true"
@@ -12,6 +13,7 @@
                          [show-all]="true"
                          ></pdf-viewer>
         </div>
+        <button printSectionId="impresion" ngxPrint>print</button> 
     </div>
 </div>
 

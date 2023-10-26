@@ -146,22 +146,20 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
             type: 'application/pdf',
           });
           this.pdfurl = URL.createObjectURL(blob);
-          let fileName: string = Math.floor(Math.random() * Date.now()).toString(16) + ".pdf"
-          FileSaver.saveAs(blob, fileName);
-          const path:string = conf.server.carpetaDeDescargas+fileName
-          
-          setTimeout(() => {
-            this.api.getImprimir(path,conf.server.defaultPrinter).subscribe((data)=>{
-              console.log(data)
-            })
-          }, 500);
-        
+
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = this.pdfurl;
+        document.body.appendChild(iframe);
+        if(iframe.contentWindow!=null){
+          iframe.contentWindow.print();
+        }
+         
         this.modalRef = this.modalService.open(RecepcionExitosaComponent, { size: 'lg', centered: true });
-        this.modalRef.componentInstance.data=this.pdfurl
 
         setTimeout(() => {
           this.modalRef.close()
-          }, 10000);
+          }, 15000);
 
         this.router.navigate(['/']);
       });
