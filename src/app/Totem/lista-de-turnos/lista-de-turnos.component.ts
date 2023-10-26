@@ -102,9 +102,15 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
   // Se ejecuta por el click en el botón "seleccionar" y deja seteado el turno.
   autorecepcion(index: number) {
     this.turno = this.turnos.Turnos[index];
+    if(!this.turno.AceptaAutogestion){
+      console.log(this.turno.idTurno)
+      return
+    }
   }
 
   aceptar() {
+
+
     let token = this.numeros.get('token')?.value;
     if (token == '') {
       this.alert.mostrarAlerta(
@@ -120,33 +126,12 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     el.click();
 
     //Disparar proceso de autorecepcion.
-    // this.api.getAutorecepcion(this.turno.idTurno, token).subscribe((data) => {
-    //    if (data.Exito) {
-    //     var blob = new Blob([this._base64ToArrayBuffer(data.ReporteTicketString)], {
-    //       type: 'application/pdf',
-    //     });
-    //     this.pdfurl = URL.createObjectURL(blob);
-    //     let fileName: string = Math.floor(Math.random() * Date.now()).toString(16) + ".pdf"
-    //     FileSaver.saveAs(blob, fileName);
-    //     const path:string = conf.server.carpetaDeDescargas+fileName
-        
-    //     setTimeout(() => {
-    //       this.api.getImprimir(path,conf.server.defaultPrinter).subscribe((data)=>{
-    //       })
-    //     }, 500);
-       
-    //     this.router.navigate(['recepcionExitosa']);
-    //   }
-    // });
-
-    this.http
-      .get('./assets/reportePdf.txt', { responseType: 'text' })
-      .subscribe((data) => {
-          var blob = new Blob([this._base64ToArrayBuffer(data)], {
-            type: 'application/pdf',
-          });
-          this.pdfurl = URL.createObjectURL(blob);
-
+    this.api.getAutorecepcion(this.turno.idTurno, token).subscribe((data) => {
+       if (data.Exito) {
+        var blob = new Blob([this._base64ToArrayBuffer(data.ReporteTicketString)], {
+          type: 'application/pdf',
+        });
+        this.pdfurl = URL.createObjectURL(blob);
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';
         iframe.src = this.pdfurl;
@@ -156,13 +141,39 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
         }
          
         this.modalRef = this.modalService.open(RecepcionExitosaComponent, { size: 'lg', centered: true });
-
+        
         setTimeout(() => {
           this.modalRef.close()
           }, 15000);
 
         this.router.navigate(['/']);
-      });
+      }
+    });
+
+    // this.http
+    //   .get('./assets/reportePdf.txt', { responseType: 'text' })
+    //   .subscribe((data) => {
+    //       var blob = new Blob([this._base64ToArrayBuffer(data)], {
+    //         type: 'application/pdf',
+    //       });
+    //       this.pdfurl = URL.createObjectURL(blob);
+
+    //     const iframe = document.createElement('iframe');
+    //     iframe.style.display = 'none';
+    //     iframe.src = this.pdfurl;
+    //     document.body.appendChild(iframe);
+    //     if(iframe.contentWindow!=null){
+    //       iframe.contentWindow.print();
+    //     }
+         
+    //     this.modalRef = this.modalService.open(RecepcionExitosaComponent, { size: 'lg', centered: true });
+        
+    //     setTimeout(() => {
+    //       this.modalRef.close()
+    //       }, 15000);
+
+    //     this.router.navigate(['/']);
+    //   });
   }
 
   _base64ToArrayBuffer(base64: string) {

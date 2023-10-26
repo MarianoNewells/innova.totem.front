@@ -37,7 +37,7 @@ export class AlertService {
     let timeoutId: number | null = null;
 
     const closeAlert = () => {
-      if (timeoutId !== null) {
+        if (timeoutId !== null) {
         clearTimeout(timeoutId);
       }
       alertDiv.remove();

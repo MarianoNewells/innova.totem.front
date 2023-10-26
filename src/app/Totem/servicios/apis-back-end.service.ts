@@ -91,17 +91,6 @@ export class ApisBackEndService {
     };
     return this.http.get<Autorecepcion>(endPoint, httpOptions);
   }
-  getImprimir(nombrePdf: string, nombreImpresora: string) {
-    const endPoint = "http://localhost:8080/";
-    let params = new HttpParams();
-    params = params.append('nombrePdf', nombrePdf);
-    params = params.append('impresora', nombreImpresora);
-    let httpOptions = {
-      headers: this.basicHeader,
-      params: params,
-    };
-    return this.http.get<any>(endPoint, httpOptions);
-  }
   getEstudios(idPersona: number) {
     const endPoint = this.urlBase + 'ConsultarEstudios';
     let params = new HttpParams();

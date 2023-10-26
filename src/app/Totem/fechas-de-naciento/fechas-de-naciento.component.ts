@@ -90,7 +90,7 @@ export class FechasDeNacientoComponent implements OnInit, AfterViewInit {
       this.alert.mostrarAlerta(
         'La fecha seleccionada es inválida',
         AlertType.Danger,
-        4
+        3
       );
     }
   }
