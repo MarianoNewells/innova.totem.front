@@ -66,6 +66,7 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     }
 
     const idCentroDeAtencion = sessionStorage.getItem('idCentroDeAtencion');
+    
     //console.log('idCentroDeAtencion: ' + idCentroDeAtencion);
     if (idCentroDeAtencion) {
       this.idCentroDeAtencion = idCentroDeAtencion;

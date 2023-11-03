@@ -21,6 +21,7 @@ import { RecepcionExitosaComponent } from './Totem/recepcion-exitosa/recepcion-e
 import { ListaDeCoberturasComponent } from './Totem/lista-de-coberturas/lista-de-coberturas.component';
 import {NgxPrintModule} from 'ngx-print';
 import { RecepcionNoExitosaComponent } from './Totem/recepcion-no-exitosa/recepcion-no-exitosa.component';
+import { RecepcionRetirarEstudioComponent } from './Totem/recepcion-retirar-estudio/recepcion-retirar-estudio.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { RecepcionNoExitosaComponent } from './Totem/recepcion-no-exitosa/recepc
     RecepcionExitosaComponent,
     ListaDeCoberturasComponent,
     RecepcionNoExitosaComponent,
+    RecepcionRetirarEstudioComponent,
   ],
   imports: [
     BrowserModule,

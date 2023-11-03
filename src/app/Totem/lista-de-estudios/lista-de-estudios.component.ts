@@ -8,6 +8,7 @@ import { NodoHijo } from '../modelos/nodosHijos';
 import { Persona } from '../modelos/dni';
 import { Estudio, Estudios } from '../modelos/estudios';
 import { ModalInformeComponent } from '../modales/modal-informe/modal-informe.component';
+import { RecepcionRetirarEstudioComponent } from '../recepcion-retirar-estudio/recepcion-retirar-estudio.component';
 
 @Component({
   selector: 'app-lista-de-estudios',
@@ -23,6 +24,7 @@ export class ListaDeEstudiosComponent implements OnInit{
   estudios: Estudios = new Estudios();
   estudio: Estudio = new Estudio();
   modalRef:any
+  idPersona:number=0
   constructor( private api: ApisBackEndService,
     private router: Router,
     private alert: AlertService,
@@ -38,8 +40,9 @@ export class ListaDeEstudiosComponent implements OnInit{
       if (datoPersona!=null) {
         this.persona = JSON.parse(datoPersona);
         this.nombreCompleto =
-          this.persona._apellido + ', ' + this.persona._Nombre;
+        this.persona._apellido + ', ' + this.persona._Nombre;
         this.dni = this.persona._Documento._Numero;
+        this.idPersona = this.persona._Id
       }
     }
 
@@ -53,6 +56,12 @@ export class ListaDeEstudiosComponent implements OnInit{
         if (this.estudios.Estudios.length == 0) {
           this.tituloPantalla = 'No hay turnos disponibles';
         }
+        else{
+          this.estudios.Estudios.map(item=>{
+            item.FechaRealizacionString = item.FechaRealizacionString.replaceAll("//","/")
+          })
+        }
+        //console.log(this.estudios.Estudios)
       }
     });
     this.mostrarHora()
@@ -60,20 +69,39 @@ export class ListaDeEstudiosComponent implements OnInit{
 
   verEstudio(index:number){
     const idEstudio = this.estudios.Estudios[index].id
+    const idCentroDeAtencion = Number(sessionStorage.getItem('idCentroDeAtencion'));
     const nombreEstudio = this.estudios.Estudios[index].NombreEstudio
-    this.api.getInforme(idEstudio).subscribe((data)=>{
-      var blob = new Blob([this._base64ToArrayBuffer(data.Informe)], {
+    this.api.getInforme(idEstudio,idCentroDeAtencion,this.idPersona).subscribe((data)=>{
+      var blob = new Blob([this._base64ToArrayBuffer(data.Ticket)], {
         type: 'application/pdf',
       });
+      
       const pdfurl = URL.createObjectURL(blob);
-      this.modalRef = this.modalService.open(ModalInformeComponent, { size: 'lg', centered: true });
-      this.modalRef.componentInstance.data=pdfurl
-      this.modalRef.componentInstance.nombreCompleto=this.nombreCompleto
-      this.modalRef.componentInstance.ref = this.modalRef
-      this.modalRef.componentInstance.nombreEstudio = nombreEstudio.substring(0,60)
-      setInterval(() => {
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = pdfurl;
+      document.body.appendChild(iframe);
+      if(iframe.contentWindow!=null){
+        iframe.contentWindow.print();
+      }
+
+      this.modalRef = this.modalService.open(RecepcionRetirarEstudioComponent, { size: 'lg', centered: true });
+        
+      setTimeout(() => {
         this.modalRef.close()
-      }, 60000);
+        }, 15000);
+
+       //this.router.navigate(['/']);
+
+      // const pdfurl = URL.createObjectURL(blob);
+      // this.modalRef = this.modalService.open(ModalInformeComponent, { size: 'lg', centered: true });
+      // this.modalRef.componentInstance.data=pdfurl
+      // this.modalRef.componentInstance.nombreCompleto=this.nombreCompleto
+      // this.modalRef.componentInstance.ref = this.modalRef
+      // this.modalRef.componentInstance.nombreEstudio = nombreEstudio.substring(0,60)
+      // setInterval(() => {
+      //   this.modalRef.close()
+      // }, 60000);
     })
   }
 

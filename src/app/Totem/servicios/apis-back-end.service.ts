@@ -12,6 +12,7 @@ import { Estudios } from '../modelos/estudios';
 import { Informe } from '../modelos/informe';
 import { Coberturas } from '../modelos/coberturas';
 import { TicketRecepcionista } from '../modelos/ticketRecepcionista';
+import { TicketParaRetirarEstudio } from '../modelos/ticketParaRetirarEstudio';
 
 @Injectable({
   providedIn: 'root',
@@ -103,15 +104,17 @@ export class ApisBackEndService {
     return this.http.get<Estudios>(endPoint, httpOptions);
   }
 
-  getInforme(idInforme: number) {
-    const endPoint = this.urlBase + 'ObtenerInforme';
+  getInforme(idInforme: number, idCentroDeAtencion:number,idPaciente:number) {
+    const endPoint = this.urlBase + 'ObtenerTicketEImprimirInforme';
     let params = new HttpParams();
     params = params.append('idInforme', idInforme);
+    params = params.append('idCentroAtencion', idCentroDeAtencion);
+    params = params.append('idPaciente', idPaciente);
     let httpOptions = {
       headers: this.basicHeader,
       params: params,
     };
-    return this.http.get<Informe>(endPoint, httpOptions);
+    return this.http.get<TicketParaRetirarEstudio>(endPoint, httpOptions);
   }
 
   getCoberturas(idPersona: number) {
