@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApisBackEndService } from '../servicios/apis-back-end.service';
 import { Router } from '@angular/router';
 import { AlertService, AlertType } from '../servicios/alert.service';
@@ -10,7 +10,7 @@ import { NodoHijo } from '../modelos/nodosHijos';
   templateUrl: './fechas-de-naciento.component.html',
   styleUrls: ['./fechas-de-naciento.component.css'],
 })
-export class FechasDeNacientoComponent implements OnInit, AfterViewInit {
+export class FechasDeNacientoComponent implements OnInit {
   //persona?: Persona = new Persona();
   nodoFechasDeNacimiento: NodoHijo = new NodoHijo();
   tituloPantalla: string = '';
@@ -31,26 +31,29 @@ export class FechasDeNacientoComponent implements OnInit, AfterViewInit {
     private api: ApisBackEndService,
     private router: Router,
     private alert: AlertService
-  ) {
-    const dato = sessionStorage.getItem('Persona');
-    if (dato) {
-      this.persona = JSON.parse(dato);
-    }
-    const dato_ = sessionStorage.getItem('nodoFechasDeNacimiento');
-    if (dato_) {
-      this.nodoFechasDeNacimiento = JSON.parse(dato_);
-      this.tituloPantalla = this.nodoFechasDeNacimiento._Nombre;
-    }
-    // console.log('Fecha de nacimiento:' + this.nodoFechasDeNacimiento._Id);
+    ) {
+      const dato = sessionStorage.getItem('Persona');
+      if (dato) {
+        this.persona = JSON.parse(dato);
+      }
+      const dato_ = sessionStorage.getItem('nodoFechasDeNacimiento');
+      if (dato_) {
+        this.nodoFechasDeNacimiento = JSON.parse(dato_);
+        this.tituloPantalla = this.nodoFechasDeNacimiento._Nombre;
+      }
+      // console.log('Fecha de nacimiento:' + this.nodoFechasDeNacimiento._Id);
+      this.getFechasDeNacimiento()
+      //Delay necesario para que carge todos los datos en pantalla.
+      // Sin a veces esto da un error al seleccionar por primera vez la fecha de nacimiento.
+      setTimeout(() => {
+        console.log("Fechas")
+      }, 3000);
   }
   ngOnInit(): void {
     this.mostrarHora();
   }
-
-  ngAfterViewInit(): void {
-    this.getFechasDeNacimiento();
-  }
-
+ 
+ 
   getFechasDeNacimiento() {
     this.api
       .getFechasDeNacimiento(this.persona._fechaNacimiento)
