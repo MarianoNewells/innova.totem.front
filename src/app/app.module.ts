@@ -22,6 +22,16 @@ import { ListaDeCoberturasComponent } from './Totem/lista-de-coberturas/lista-de
 import {NgxPrintModule} from 'ngx-print';
 import { RecepcionNoExitosaComponent } from './Totem/recepcion-no-exitosa/recepcion-no-exitosa.component';
 import { RecepcionRetirarEstudioComponent } from './Totem/recepcion-retirar-estudio/recepcion-retirar-estudio.component';
+import { ListadoDeCentrosComponent } from './Totem/listado-de-centros/listado-de-centros.component';
+import { ListadoDeTurnosDisponiblesComponent } from './Totem/listado-de-turnos-disponibles/listado-de-turnos-disponibles.component';
+import { ListadoDeDiasDisponiblesComponent } from './Totem/listado-de-dias-disponibles/listado-de-dias-disponibles.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import localeEs from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+import { ListadoDeServiciosPrestacionComponent } from './Totem/listado-de-servicios-prestacion/listado-de-servicios-prestacion.component';
+
+registerLocaleData(localeEs)
 
 @NgModule({
   declarations: [
@@ -39,6 +49,11 @@ import { RecepcionRetirarEstudioComponent } from './Totem/recepcion-retirar-estu
     ListaDeCoberturasComponent,
     RecepcionNoExitosaComponent,
     RecepcionRetirarEstudioComponent,
+    ListadoDeCentrosComponent,
+    ListadoDeTurnosDisponiblesComponent,
+    ListadoDeDiasDisponiblesComponent,
+    ListadoDeServiciosPrestacionComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -47,7 +62,11 @@ import { RecepcionRetirarEstudioComponent } from './Totem/recepcion-retirar-estu
     HttpClientModule,
     PdfViewerModule,
     NgxExtendedPdfViewerModule,
-    NgxPrintModule
+    NgxPrintModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

@@ -8,16 +8,23 @@ import { ListaDeTurnosComponent } from './Totem/lista-de-turnos/lista-de-turnos.
 import { ListaDeEstudiosComponent } from './Totem/lista-de-estudios/lista-de-estudios.component';
 import { RecepcionExitosaComponent } from './Totem/recepcion-exitosa/recepcion-exitosa.component';
 import { ListaDeCoberturasComponent } from './Totem/lista-de-coberturas/lista-de-coberturas.component';
-
+import { ListadoDeCentrosComponent } from './Totem/listado-de-centros/listado-de-centros.component';
+import { ListadoDeTurnosDisponiblesComponent } from './Totem/listado-de-turnos-disponibles/listado-de-turnos-disponibles.component';
+import { ListadoDeDiasDisponiblesComponent } from './Totem/listado-de-dias-disponibles/listado-de-dias-disponibles.component';
+import { ListadoDeServiciosPrestacionComponent } from './Totem/listado-de-servicios-prestacion/listado-de-servicios-prestacion.component';
 const routes: Routes = [
   { path: '', component: BienvenidaComponent },
-  { path: 'dni', component: DniComponent },
-  { path: 'bienvenida', component: BienvenidaComponent },
-  { path: 'fechasDeNacimiento', component: FechasDeNacientoComponent },
-  { path: 'seleccionDeTramite', component: SeleccionDeTramiteComponent },
-  { path: 'listaDeTurnos', component: ListaDeTurnosComponent },
+  { path: 'dni', component: DniComponent }, // primero
+  { path: 'bienvenida', component: BienvenidaComponent }, 
+  { path: 'fechasDeNacimiento', component: FechasDeNacientoComponent }, // segundo
+  { path: 'seleccionDeTramite', component: SeleccionDeTramiteComponent }, // tercero
+  { path: 'listaDeTurnos', component: ListaDeTurnosComponent }, // CIRCUITO APARTE
+  { path: 'listaDeCentros', component: ListadoDeCentrosComponent }, 
   { path: 'listaDeEstudios', component: ListaDeEstudiosComponent },
-  { path: 'listaDeCoberturas', component: ListaDeCoberturasComponent },
+  { path: 'listaDeCoberturas', component: ListaDeCoberturasComponent }, //  PRIMER CIRCUITO DE TURNOS
+  { path: 'listadeServiciosPrestacion', component: ListadoDeServiciosPrestacionComponent }, // SEGUNDO CIRCUITO DE TURNOS
+  { path: 'listaDeTurnosDisponibles', component: ListadoDeTurnosDisponiblesComponent }, // TERCERO CIRCUITO DE TURNOS
+  { path: 'ListadeDiasDisponibles', component: ListadoDeDiasDisponiblesComponent }, // CUARTO CIRCUITO DE TURNOS
 ];
 
 @NgModule({

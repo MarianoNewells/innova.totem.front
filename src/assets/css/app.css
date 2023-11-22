@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.cal-month-view .cal-day-cell.cal-today{
+  background-color: transparent;
+}
+
 .btn.focus,
 .btn:focus {
   outline: 0;
@@ -2888,9 +2892,9 @@ tips-input-select-multiple
 
 @font-face {
   font-family: fontInnova;
-  src: url(../assets/fonts/fontinnova.eot);
+  /* src: url(../assets/fonts/fontinnova.eot);
   src: url(../assets/fonts/fontinnova.woff) format("woff"),
-    url(./assets/fonts/fontinnova.ttf) format("truetype");
+    url(./assets/fonts/fontinnova.ttf) format("truetype"); */
   font-weight: 400;
   font-style: normal;
 }
@@ -37067,7 +37071,7 @@ pre:last-child {
 
 .calendario-vacunacion .fixed-table-container.vacunacion .vc-box .vc-bg-img {
   height: 7rem;
-  background-image: url(./assets/img/icon-vaccine.png);
+  /* background-image: url(./assets/img/icon-vaccine.png); */
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -37127,7 +37131,7 @@ pre:last-child {
   .fixed-table-container.vacunacion
   .vc-box.vc-esquema-dosis
   .vc-bg-img {
-  background-image: url(../assets/img/icon-vaccine-grey.png);
+  /* background-image: url(../assets/img/icon-vaccine-grey.png); */
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -49293,7 +49297,7 @@ th.fc-resource-cell {
 
 .calendario-vacunacion .fixed-table-container.vacunacion .vc-box .vc-bg-img {
   height: 7rem;
-  background-image: url(../assets/img/icon-vaccine.png);
+  /* background-image: url(../assets/img/icon-vaccine.png); */
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -49369,7 +49373,7 @@ th.fc-resource-cell {
   .fixed-table-container.vacunacion
   .vc-box.vc-esquema-dosis
   .vc-bg-img {
-  background-image: url(../assets/img/icon-vaccine-grey.png);
+  /* background-image: url(../assets/img/icon-vaccine-grey.png); */
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -51792,4 +51796,11 @@ input[type="radio"] {
 #dropdown_niveles .badge-primary {
   color: #fff;
   background-color: #1685f3 !important;
+}
+
+.cal-month-view .cal-header .cal-cell { text-transform: capitalize; }
+
+:host /deep/ .day-view .day-view-columns {
+  display: flex !important;
+  flex-direction: row !important;
 }
