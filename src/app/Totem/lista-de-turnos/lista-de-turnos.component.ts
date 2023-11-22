@@ -150,38 +150,12 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     el.click();
 
     //Disparar proceso de autorecepcion.
-    this.api.getAutorecepcion(this.turno.idTurno, token).subscribe((data) => {
-       if (data.Exito) {
-        var blob = new Blob([this._base64ToArrayBuffer(data.ReporteTicketString)], {
-          type: 'application/pdf',
-        });
-        this.pdfurl = URL.createObjectURL(blob);
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = this.pdfurl;
-        document.body.appendChild(iframe);
-        if(iframe.contentWindow!=null){
-          iframe.contentWindow.print();
-        }
-         
-        this.modalRef = this.modalService.open(RecepcionExitosaComponent, { size: 'lg', centered: true });
-        
-        setTimeout(() => {
-          this.modalRef.close()
-          }, 15000);
-
-        this.router.navigate(['/']);
-      }
-    });
-
-    // this.http
-    //   .get('./assets/reportePdf.txt', { responseType: 'text' })
-    //   .subscribe((data) => {
-    //       var blob = new Blob([this._base64ToArrayBuffer(data)], {
-    //         type: 'application/pdf',
-    //       });
-    //       this.pdfurl = URL.createObjectURL(blob);
-
+    // this.api.getAutorecepcion(this.turno.idTurno, token).subscribe((data) => {
+    //    if (data.Exito) {
+    //     var blob = new Blob([this._base64ToArrayBuffer(data.ReporteTicketString)], {
+    //       type: 'application/pdf',
+    //     });
+    //     this.pdfurl = URL.createObjectURL(blob);
     //     const iframe = document.createElement('iframe');
     //     iframe.style.display = 'none';
     //     iframe.src = this.pdfurl;
@@ -195,9 +169,35 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     //     setTimeout(() => {
     //       this.modalRef.close()
     //       }, 15000);
+
+    //     this.router.navigate(['/']);
+    //   }
+    // });
+
+    this.http
+      .get('./assets/reportePdf.txt', { responseType: 'text' })
+      .subscribe((data) => {
+          var blob = new Blob([this._base64ToArrayBuffer(data)], {
+            type: 'application/pdf',
+          });
+          this.pdfurl = URL.createObjectURL(blob);
+
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = this.pdfurl;
+        document.body.appendChild(iframe);
+        if(iframe.contentWindow!=null){
+          iframe.contentWindow.print();
+        }
+         
+        this.modalRef = this.modalService.open(RecepcionExitosaComponent, { size: 'lg', centered: true });
+        
+        setTimeout(() => {
+          this.modalRef.close()
+          }, 15000);
           
-    //     //this.router.navigate(['/']);
-    //   });
+        //this.router.navigate(['/']);
+      });
   }
 
   _base64ToArrayBuffer(base64: string) {
