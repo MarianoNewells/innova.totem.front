@@ -13,11 +13,17 @@ export class SeleccionDeTramiteComponent implements OnInit, AfterViewInit {
   nodoSeleccionDeTramite: NodoHijo = new NodoHijo();
   tituloPantalla: string = '';
   tramites: NodosHijos = [];
+  idAccionAutorecepcionDeTurno:number=0
+  idAccionConsultaDeEstudios:number=0
+  idAccionCrearTurno:number=0
   constructor(
     private api: ApisBackEndService,
     private router: Router,
     private alert: AlertService
   ) {
+    this.idAccionAutorecepcionDeTurno = Number(sessionStorage.getItem('idAccionAutorecepcionDeTurno'))
+    this.idAccionConsultaDeEstudios = Number(sessionStorage.getItem('idAccionConsultaDeEstudios'))
+    this.idAccionCrearTurno = Number(sessionStorage.getItem('idAccionCrearTurno'))
     const dato_ = sessionStorage.getItem('nodoSeleccionDeTramite');
     if (dato_) {
       this.nodoSeleccionDeTramite = JSON.parse(dato_);
@@ -30,14 +36,6 @@ export class SeleccionDeTramiteComponent implements OnInit, AfterViewInit {
       .subscribe((datos) => {
         if (datos) {
           this.tramites = datos;
-          // console.log(
-          //   'Trámites: ' +
-          //     this.tramites[0]._Id +
-          //     ', ' +
-          //     this.tramites[1]._Id +
-          //     ', ' +
-          //     this.tramites[2]._Id
-          // );
         }
       });
   }
@@ -47,8 +45,9 @@ export class SeleccionDeTramiteComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {}
   seleccionDeTramite(index: number) {
     let idSiguientePantalla: Number = this.tramites[index]._Id;
+    console.log("idSiguientePantalla"+idSiguientePantalla)
     switch (idSiguientePantalla) {
-      case 23: // Nuevo turno
+      case this.idAccionCrearTurno: // Nuevo turno
       this.api
       .getNodosHijos(this.tramites[index]._Id)
       .subscribe((datos) => {
@@ -61,7 +60,7 @@ export class SeleccionDeTramiteComponent implements OnInit, AfterViewInit {
             }
           });
           break;
-      case 24: // Autorecepción de turno
+      case this.idAccionAutorecepcionDeTurno: // Autorecepción de turno
           // Buscar la sieguiente pantalla.
           // console.log('Lista de turnos:' + this.tramites[index]._Id);
           sessionStorage.setItem(
@@ -70,7 +69,7 @@ export class SeleccionDeTramiteComponent implements OnInit, AfterViewInit {
           );
           this.router.navigate(['listaDeTurnos']);
           break;
-      case 25: // Consulta de estudios
+      case this.idAccionConsultaDeEstudios: // Consulta de estudios
         sessionStorage.setItem(
           'nodoListaDeEstudios',
           JSON.stringify(this.tramites[index])

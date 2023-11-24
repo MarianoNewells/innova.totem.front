@@ -13,6 +13,7 @@ import { Informe } from '../modelos/informe';
 import { Coberturas } from '../modelos/coberturas';
 import { TicketRecepcionista } from '../modelos/ticketRecepcionista';
 import { TicketParaRetirarEstudio } from '../modelos/ticketParaRetirarEstudio';
+import { Acciones } from '../modelos/acciones';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,22 @@ export class ApisBackEndService {
     Accept: 'application/json',
   };
   constructor(private http: HttpClient) {}
+
+  getInicializacionTotem() {
+    const endPoint = this.urlBase + 'PantallaAutoGestion';
+     return this.http.get<InicializacionTotem>(endPoint);
+  }
+
+  getAcciones(idTerminal: number){
+    const endPoint = this.urlBase + 'ObtenerAcciones';
+    let params = new HttpParams();
+    params = params.append('IdTerminal', idTerminal);
+    let httpOptions = {
+      headers: this.basicHeader,
+      params: params,
+    };
+    return this.http.get<Acciones>(endPoint, httpOptions);
+  }
 
   getValidaDni(tipo: string, numero: string) {
     const endPoint = this.urlBase + 'RecepcionDeIngreso';
@@ -46,10 +63,6 @@ export class ApisBackEndService {
       params: params,
     };
     return this.http.get<FechasDeNacimiento>(endPoint, httpOptions);
-  }
-  getInicializacionTotem() {
-    const endPoint = this.urlBase + 'PantallaAutoGestion';
-    return this.http.get<InicializacionTotem>(endPoint);
   }
   getNodoRaiz(idTerminal: number) {
     const endPoint = this.urlBase + 'ObtenerNodoRaiz';
