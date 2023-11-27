@@ -49,9 +49,21 @@ export class ListaDeCoberturasComponent implements OnInit {
     }
 
     seleccionCobertura(index:number){
-      alert(this.coberturas.Coberturas[index].idCobertura)
-    }
-
+      sessionStorage.setItem('CoberturaPaciente', JSON.stringify(this.coberturas.Coberturas[index]));
+      const dato_ = sessionStorage.getItem('CoberturaPaciente');
+      // if (dato_) { 
+      //   console.log("CoberturaPaciente:",JSON.parse(dato_));  
+      // };
+      this.api.getNodosHijos(this.nodoListaDeCoberturas._Id).subscribe((datosPrestaciones) => {
+      sessionStorage.setItem('nodoPrestaciones', JSON.stringify(datosPrestaciones[0]));
+      // const dato__ = sessionStorage.getItem('nodoPrestaciones');
+      // if (dato__) { 
+      //   console.log("nodoPrestaciones:",JSON.parse(dato__));  
+      // };
+      this.router.navigate(['listadeServiciosPrestacion']);
+    })
+   }
+  
     volver() {
       this.router.navigate(['seleccionDeTramite']);
     }

@@ -1,6 +1,6 @@
 {
   "server": {
-    "urlBase": "http://localhost:13503/api/PantallaAutoGestion/",
+    "urlBase": "http://innova.1704.dev.tipsalud.local/Asistencial/Totem-Autogestion/BakcEnd/api/PantallaAutoGestion/",
     "carpetaDeDescargas": "C:\\Users\\MARIA\\Downloads\\",
     "defaultPrinter":"Microsoft Print to PDF"
   }
