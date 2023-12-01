@@ -30,6 +30,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 import { ListadoDeServiciosPrestacionComponent } from './Totem/listado-de-servicios-prestacion/listado-de-servicios-prestacion.component';
+import { BnNgIdleService } from 'bn-ng-idle'; // Para detectar inactividad del usuario
 
 registerLocaleData(localeEs)
 
@@ -71,8 +72,8 @@ registerLocaleData(localeEs)
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: SpinnerInterceptor,
-    multi: true
-  }],
+    multi: true,
+  },BnNgIdleService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
