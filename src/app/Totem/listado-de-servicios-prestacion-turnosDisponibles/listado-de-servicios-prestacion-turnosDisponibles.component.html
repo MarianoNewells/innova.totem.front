@@ -42,7 +42,7 @@
                 <div class="col-12 col-md-auto mb-2">
                   <div class="title-totem">
                     <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    {{ tituloPantalla }}
+                    {{ titulosPantalla[pasoActual - 1] }}
                   </div>
                 </div>
                 <!--Fin Titulos H1 y p-->
@@ -50,13 +50,6 @@
                 <div class="col-12 col-md-auto img-thumbnail">
                   <div class="row p-1 d-flex align-items-center">
                     <div class="col-auto px-1">
-                      <!-- <div class="d-flex justify-content-center">
-                        <img
-                          src="./listaDeTurnos_files/5.jpg"
-                          class="img-thumbnail user-totem"
-                          alt="Responsive image"
-                        />
-                      </div> -->
                     </div>
                     <div class="col">
                       <h2>
@@ -71,79 +64,104 @@
               </div>
             </div>
             <!--Fin datos de persona-->
-            <!--Tabla lista de turnos-->
+            <!--Tabla lista de servicios prestaciones y turnos-->
+
             <div class="col-11 lista-turnos-totem">
               <div class="scroll-table-totem my-3">
-                <ul class="item-list lista-turnos-totem__lista">
-                    <li class="item">
-                        <div class="item-row item-row__turno--seleccionado">
+                <!-- Paso 1: Servicios -->
+                <ng-container *ngIf="pasoActual === 1">
+                  <ul class="item-list lista-turnos-totem__lista">
+                    <li class="item" *ngFor="let servicio of servicios">
+                      <div class="item-row item-row__turno--activo">
+                        <div class="item-col item-hora-totem fixed">
+                          <i class="fa fa-user-md fa-3x" aria-hidden="true"></i>
+                        </div>
+                        <div class="item-col item-datos-totem">
+                          <div>
+                            <p><strong>{{ servicio.Nombre }}</strong></p>
+                          </div>
+                        </div>
+                        <div class="item-col item-accion-totem fixed">
+                          <button type="button" class="btn btn-primary" (click)="seleccionarServicio(servicio)">
+                            Seleccionar
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+
+                </ng-container>
+            
+                <!-- Paso 2: Prestaciones -->
+                <ng-container *ngIf="pasoActual === 2">
+                  <ul class="item-list lista-turnos-totem__lista">
+                    <li class="item" *ngFor="let prestacion of prestaciones">
+                      <div class="item-row item-row__turno--activo">
+                        <div class="item-col item-hora-totem fixed">
+                          <i class="fa fa-user-md fa-3x" aria-hidden="true"></i>
+                        </div>
+                        <div class="item-col item-datos-totem">
+                          <div>
+                            <p><strong>{{ prestacion._Nombre }}</strong></p>
+                          </div>
+                        </div>
+                        <div class="item-col item-accion-totem fixed">
+                          <button type="button" class="btn btn-primary" (click)="seleccionarPrestacion(prestacion)">
+                            Seleccionar
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </ng-container>
+            
+                <!-- Paso 3: Turnos -->
+                <ng-container *ngIf="pasoActual === 3">
+                                     <ul class="item-list lista-turnos-totem__lista">
+                      <li
+                        class="item"
+                        *ngFor="let turno of turnos"
+                      >
+                        <div class="item-row item-row__turno--activo">
                           <div class="item-col item-hora-totem fixed">
-                            <i class="fa fa-hospital-o fa-3x" aria-hidden="true"></i>
+                            <i class="fa fa-clock-o fa-3x" aria-hidden="true"></i>
+                            <p>
+                              <small>{{ turno.HoraTurno }}</small>
+                            </p>
                           </div>
                           <div class="item-col item-datos-totem">
                             <div>
-                              <p><strong>Lujan, Norma</strong></p>
-                              <p><small>Cardiologia</small></p>
+                              <p>
+                                <strong>
+                                  Médico:
+                                  {{ turno.NombreRecurso }}
+                                </strong>
+                              </p>
+                              <p>
+                                <small>{{turno.FechaConDia }}</small>
+                              </p>
                             </div>
                           </div>
-
-
-                          <div class="centrado-derecha">
-                            <div>
-                              <p><small>8:00 AM hasta 18:00 PM</small></p>
-                            </div>
-                          </div>
-
-
-                          <div class="center-btn">
+                          <div class="item-col item-accion-totem fixed">
                             <button
                               type="button"
                               class="btn btn-primary"
-                              data-toggle="modal"
-                              data-target="#modal-confirmacion-requisitos"
                             >
-                              VER TURNOS DISPONIBLES
-                              <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                              Seleccionar
                             </button>
                           </div>
                         </div>
                       </li>
-                      
-                      
-                      
-                  <!-- <li class="item">
-                    <div class="item-row item-row__turno--otros">
-                      <div class="item-col item-hora-totem fixed">
-                        <i class="fa fa-clock-o fa-3x" aria-hidden="true"></i>
-                        <p><small>14:00</small></p>
-                      </div>
-                      <div class="item-col item-datos-totem">
-                        <div>
-                          <p>
-                            <strong>Cardiología - Moreno, Mariela Ana</strong>
-                          </p>
-                          <p><small>Apross - Plan Apross s18</small></p>
-                        </div>
-                      </div>
-                      <div class="item-col item-info-totem fixed align-self-end">
-                        <p>
-                          <small
-                            ><i
-                              class="fa fa-info-circle text-mute"
-                              aria-hidden="true"
-                            ></i
-                            >Turno vencido</small
-                          >
-                        </p>
-                      </div>
-                    </div>
-                  </li> -->
-                </ul>
+                    </ul>
+                </ng-container>
               </div>
             </div>
-            <!--Fin de lista de turnos-->
+
+
+
+            <!--Fin de lista de servicios y prestaciones-->
           </div>
-          <!--Fin Titulo - Leyenda y lista de turnos-->
+          <!--Fin Titulo - Leyenda y lista de servicios y prestaciones-->
           <!--Footer-->
           <footer
             class="fixed-bottom d-flex justify-content-end p-2 py-xl-5 mx-auto"

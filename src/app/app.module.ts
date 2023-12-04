@@ -29,8 +29,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
-import { ListadoDeServiciosPrestacionComponent } from './Totem/listado-de-servicios-prestacion/listado-de-servicios-prestacion.component';
-
+import { ListadoDeServiciosPrestacionTurnosDisponiblesComponent } from './Totem/listado-de-servicios-prestacion-turnosDisponibles/listado-de-servicios-prestacion-turnosDisponibles.component';
 registerLocaleData(localeEs)
 
 @NgModule({
@@ -52,7 +51,7 @@ registerLocaleData(localeEs)
     ListadoDeCentrosComponent,
     ListadoDeTurnosDisponiblesComponent,
     ListadoDeDiasDisponiblesComponent,
-    ListadoDeServiciosPrestacionComponent,
+    ListadoDeServiciosPrestacionTurnosDisponiblesComponent,
     
   ],
   imports: [

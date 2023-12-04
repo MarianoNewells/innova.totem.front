@@ -14,6 +14,7 @@ import { Coberturas } from '../modelos/coberturas';
 import { TicketRecepcionista } from '../modelos/ticketRecepcionista';
 import { TicketParaRetirarEstudio } from '../modelos/ticketParaRetirarEstudio';
 import { Acciones } from '../modelos/acciones';
+import { Servicios } from '../modelos/servicios';
 
 @Injectable({
   providedIn: 'root',
@@ -140,6 +141,7 @@ export class ApisBackEndService {
     };
     return this.http.get<Coberturas>(endPoint, httpOptions);
   }
+
   getTicketRecepcionista(idTurno: number) {
     const endPoint = this.urlBase + 'ObtenerTicketRecepcionista';
     let params = new HttpParams();
@@ -149,5 +151,40 @@ export class ApisBackEndService {
       params: params,
     };
     return this.http.get<TicketRecepcionista>(endPoint, httpOptions);
+  }
+
+  getServicios() {
+    const endPoint = this.urlBase + 'ObtenerServicios';
+    let httpOptions = {
+      headers: this.basicHeader
+    };
+    return this.http.get<Servicios>(endPoint, httpOptions);
+  }
+
+  getPrestacionesDelServicio(idServicio: number,  idCentroDeAtencion: string) {
+    const endPoint = this.urlBase + 'PrestacionesDeUnServicio';
+    let params = new HttpParams();
+    params = params.append('idServicio', idServicio);
+    params = params.append('IdCentroDeAtencion', idCentroDeAtencion);
+    let httpOptions = {
+      headers: this.basicHeader,
+      params: params,
+    };
+    return this.http.get<Servicios>(endPoint, httpOptions);
+  }
+
+  getPrimerosTurnos(idCentroDeAtencion: string, idServicio: string , idPrestacion: number, dCobertura: string ) {
+    const endPoint = this.urlBase + 'PrimerosTurnosDisponibles';
+    let params = new HttpParams();
+    params = params.append('idServicio', idServicio);
+    params = params.append('IdCentroDeAtencion', idCentroDeAtencion);
+    params = params.append('pTipoDeTurno', 0);
+    params = params.append('idPrestacion', idPrestacion);
+    params = params.append('dCobertura', dCobertura);
+    let httpOptions = {
+      headers: this.basicHeader,
+      params: params,
+    };
+    return this.http.get<Servicios>(endPoint, httpOptions);
   }
 }

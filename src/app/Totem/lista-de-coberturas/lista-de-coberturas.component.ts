@@ -56,10 +56,10 @@ export class ListaDeCoberturasComponent implements OnInit {
       // };
       this.api.getNodosHijos(this.nodoListaDeCoberturas._Id).subscribe((datosPrestaciones) => {
       sessionStorage.setItem('nodoPrestaciones', JSON.stringify(datosPrestaciones[0]));
-      // const dato__ = sessionStorage.getItem('nodoPrestaciones');
-      // if (dato__) { 
-      //   console.log("nodoPrestaciones:",JSON.parse(dato__));  
-      // };
+      const dato__ = sessionStorage.getItem('nodoPrestaciones');
+      if (dato__) { 
+        console.log("nodoPrestaciones:",JSON.parse(dato__));  
+      };
       this.router.navigate(['listadeServiciosPrestacion']);
     })
    }
