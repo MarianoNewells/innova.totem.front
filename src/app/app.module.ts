@@ -23,13 +23,14 @@ import {NgxPrintModule} from 'ngx-print';
 import { RecepcionNoExitosaComponent } from './Totem/recepcion-no-exitosa/recepcion-no-exitosa.component';
 import { RecepcionRetirarEstudioComponent } from './Totem/recepcion-retirar-estudio/recepcion-retirar-estudio.component';
 import { ListadoDeCentrosComponent } from './Totem/listado-de-centros/listado-de-centros.component';
-import { ListadoDeTurnosDisponiblesComponent } from './Totem/listado-de-turnos-disponibles/listado-de-turnos-disponibles.component';
+import { ListadoDeServiciosPrestacionTurnosDisponiblesComponent } from './Totem/listado-de-servicios-prestacion-turnosDisponibles/listado-de-servicios-prestacion-turnosDisponibles.component';
 import { ListadoDeDiasDisponiblesComponent } from './Totem/listado-de-dias-disponibles/listado-de-dias-disponibles.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
-import { ListadoDeServiciosPrestacionTurnosDisponiblesComponent } from './Totem/listado-de-servicios-prestacion-turnosDisponibles/listado-de-servicios-prestacion-turnosDisponibles.component';
+import { BnNgIdleService } from 'bn-ng-idle'; // Para detectar inactividad del usuario
+
 registerLocaleData(localeEs)
 
 @NgModule({
@@ -49,7 +50,6 @@ registerLocaleData(localeEs)
     RecepcionNoExitosaComponent,
     RecepcionRetirarEstudioComponent,
     ListadoDeCentrosComponent,
-    ListadoDeTurnosDisponiblesComponent,
     ListadoDeDiasDisponiblesComponent,
     ListadoDeServiciosPrestacionTurnosDisponiblesComponent,
     
@@ -70,8 +70,8 @@ registerLocaleData(localeEs)
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: SpinnerInterceptor,
-    multi: true
-  }],
+    multi: true,
+  },BnNgIdleService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
