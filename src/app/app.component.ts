@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Volver a la pantalla inicial por x segundos de inactividad del usuario.
     this.timer.startWatching(this.secondSessionTimeOut).subscribe((isTimedOut:boolean)=>{
       if(isTimedOut){
         this.timer.resetTimer(this.secondSessionTimeOut)

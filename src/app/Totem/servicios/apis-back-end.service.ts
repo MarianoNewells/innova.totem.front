@@ -15,6 +15,7 @@ import { TicketRecepcionista } from '../modelos/ticketRecepcionista';
 import { TicketParaRetirarEstudio } from '../modelos/ticketParaRetirarEstudio';
 import { Acciones } from '../modelos/acciones';
 import { Servicios } from '../modelos/servicios';
+import { AnulacionDeTurno } from '../modelos/anulacionDeTurno';
 
 @Injectable({
   providedIn: 'root',
@@ -117,7 +118,6 @@ export class ApisBackEndService {
     };
     return this.http.get<Estudios>(endPoint, httpOptions);
   }
-
   getInforme(idInforme: number, idCentroDeAtencion:number,idPaciente:number) {
     const endPoint = this.urlBase + 'ObtenerTicketEImprimirInforme';
     let params = new HttpParams();
@@ -189,5 +189,15 @@ export class ApisBackEndService {
       params: params,
     };
     return this.http.get<Servicios>(endPoint, httpOptions);
+  }
+  getAnulacionDeTurno(idTurno: number) {
+    const endPoint = this.urlBase + 'AnularTurno';
+    let params = new HttpParams();
+    params = params.append('idTurno', idTurno)
+    let httpOptions = {
+      headers: this.basicHeader,
+      params: params
+    };
+    return this.http.get<AnulacionDeTurno>(endPoint, httpOptions);
   }
 }

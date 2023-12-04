@@ -85,8 +85,8 @@ export class FechasDeNacientoComponent implements OnInit, AfterViewInit {
           this.router.navigate(['seleccionDeTramite']);
         });
     } else {
-      console.log('Fecha del evento', fecha);
-      console.log('Fecha del objeto', this.persona._fechaNacimiento);
+      // console.log('Fecha del evento', fecha);
+      // console.log('Fecha del objeto', this.persona._fechaNacimiento);
       this.alert.mostrarAlerta(
         'La fecha seleccionada es inválida',
         AlertType.Danger,

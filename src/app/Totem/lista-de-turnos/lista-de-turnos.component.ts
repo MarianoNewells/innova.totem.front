@@ -19,6 +19,7 @@ import * as FileSaver from 'file-saver';
 import { default as conf } from 'src/assets/config.json';
 import { RecepcionExitosaComponent } from '../recepcion-exitosa/recepcion-exitosa.component';
 import { RecepcionNoExitosaComponent } from '../recepcion-no-exitosa/recepcion-no-exitosa.component';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -99,6 +100,33 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     const numeroActual = this.numeros.get('token')?.value;
     const nuevoNumero = numeroActual.substring(0, numeroActual.length - 1);
     this.numeros.controls['token'].setValue(nuevoNumero);
+  }
+
+  anulacion(index: number){
+    this.turno = this.turnos.Turnos[index]; 
+      Swal.fire({
+        title: "Anulación de turno",
+        text: "¿Confirma la anulación del turno?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Aceptar",
+        cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.value) {
+        this.api.getAnulacionDeTurno(this.turno.idTurno).subscribe((d)=>{
+          if(d.ExitoEnAnulacion){
+            // Remover la fila correspondiente al turno anulado.
+            const element = <HTMLElement> document.getElementById(String(index))
+            element.remove()
+            this.alert.mostrarAlerta(
+              'Anulación de turno exitosa',
+              AlertType.Success,
+              4
+            );
+          }
+        })
+      }
+    })
   }
 
   // Se ejecuta por el click en el botón "seleccionar" y deja seteado el turno.

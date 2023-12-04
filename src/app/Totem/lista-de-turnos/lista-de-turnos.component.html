@@ -82,7 +82,7 @@
                   class="item"
                   *ngFor="let turno of turnos.Turnos; let i = index"
                 >
-                  <div class="item-row item-row__turno--activo">
+                  <div class="item-row item-row__turno--activo" [id]="i">
                     <div class="item-col item-hora-totem fixed">
                       <i class="fa fa-clock-o fa-3x" aria-hidden="true"></i>
                       <p>
@@ -106,6 +106,16 @@
                           }}</small>
                         </p>
                       </div>
+                    </div>
+                    <div class="item-col item-accion-totem fixed">
+                      <button
+                      type="button"
+                      class="btn btn-primary"
+                      (click)="anulacion(i)"
+                      data-toggle="modal"
+                      >
+                        Anular
+                      </button>
                     </div>
                     <div class="item-col item-accion-totem fixed">
                       <button
