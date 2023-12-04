@@ -24,7 +24,6 @@ import { RecepcionNoExitosaComponent } from './Totem/recepcion-no-exitosa/recepc
 import { RecepcionRetirarEstudioComponent } from './Totem/recepcion-retirar-estudio/recepcion-retirar-estudio.component';
 import { ListadoDeCentrosComponent } from './Totem/listado-de-centros/listado-de-centros.component';
 import { ListadoDeServiciosPrestacionTurnosDisponiblesComponent } from './Totem/listado-de-servicios-prestacion-turnosDisponibles/listado-de-servicios-prestacion-turnosDisponibles.component';
-import { ListadoDeDiasDisponiblesComponent } from './Totem/listado-de-dias-disponibles/listado-de-dias-disponibles.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import localeEs from '@angular/common/locales/es';
@@ -50,7 +49,6 @@ registerLocaleData(localeEs)
     RecepcionNoExitosaComponent,
     RecepcionRetirarEstudioComponent,
     ListadoDeCentrosComponent,
-    ListadoDeDiasDisponiblesComponent,
     ListadoDeServiciosPrestacionTurnosDisponiblesComponent,
     
   ],

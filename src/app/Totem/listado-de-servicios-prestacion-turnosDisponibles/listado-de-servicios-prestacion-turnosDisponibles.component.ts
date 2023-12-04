@@ -111,7 +111,7 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
 
   //Funciones para Obtener
   obtenerServicios() {
-    this.api.getServicios().subscribe((response: any) => {
+    this.api.getServicios(this.idCentroDeAtencion).subscribe((response: any) => {
       if (response && response.Servicios && response.Servicios.length > 0) {
         this.servicios = response.Servicios;
         this.titulosPantalla[0] = 'Seleccione un servicio';

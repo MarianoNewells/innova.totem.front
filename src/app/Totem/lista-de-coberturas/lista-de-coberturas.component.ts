@@ -60,7 +60,7 @@ export class ListaDeCoberturasComponent implements OnInit {
       if (dato__) { 
         console.log("nodoPrestaciones:",JSON.parse(dato__));  
       };
-      this.router.navigate(['listadeServiciosPrestacion']);
+      this.router.navigate(['listadeServiciosPrestacionTurnos']);
     })
    }
   

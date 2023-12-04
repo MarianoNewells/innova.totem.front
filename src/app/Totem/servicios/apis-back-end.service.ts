@@ -153,10 +153,13 @@ export class ApisBackEndService {
     return this.http.get<TicketRecepcionista>(endPoint, httpOptions);
   }
 
-  getServicios() {
+  getServicios(idCentroDeAtencion: string) {
     const endPoint = this.urlBase + 'ObtenerServicios';
+    let params = new HttpParams();
+    params = params.append('IdCentroAtencion', idCentroDeAtencion)
     let httpOptions = {
-      headers: this.basicHeader
+      headers: this.basicHeader,
+      params: params
     };
     return this.http.get<Servicios>(endPoint, httpOptions);
   }
