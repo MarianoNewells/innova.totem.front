@@ -6,7 +6,7 @@ import { default as conf } from 'src/assets/config.json';
 import { InicializacionTotem } from '../modelos/inicializacionTotem';
 import { NodoRaiz } from '../modelos/nodoRaiz';
 import { NodosHijos } from '../modelos/nodosHijos';
-import { Turnos } from '../modelos/turnos';
+import { AsignarNuevoTurno, Turnos } from '../modelos/turnos';
 import { Autorecepcion } from '../modelos/autorecepcion';
 import { Estudios } from '../modelos/estudios';
 import { Informe } from '../modelos/informe';
@@ -199,5 +199,20 @@ export class ApisBackEndService {
       params: params
     };
     return this.http.get<AnulacionDeTurno>(endPoint, httpOptions);
+  }
+  getAsignarNuevoTurno(idTurno: number, IdPaciente:number,pTipoDeTurno:number,IdPrestacion:number,IdFinanciador:number,IdPlan:number) {
+    const endPoint = this.urlBase + 'AsignarNuevoTurno';
+    let params = new HttpParams();
+    params = params.append('idTurno', idTurno)
+    params = params.append('IdPaciente', IdPaciente);
+    params = params.append('pTipoDeTurno', 0);
+    params = params.append('IdPrestacion', IdPrestacion);
+    params = params.append('IdFinanciador', IdFinanciador);
+    params = params.append('IdPlan', IdPlan);
+    let httpOptions = {
+      headers: this.basicHeader,
+      params: params
+    };
+    return this.http.get<AsignarNuevoTurno>(endPoint, httpOptions);
   }
 }

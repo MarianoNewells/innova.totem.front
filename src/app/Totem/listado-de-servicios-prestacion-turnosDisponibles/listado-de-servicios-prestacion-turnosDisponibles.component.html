@@ -120,9 +120,9 @@
                                      <ul class="item-list lista-turnos-totem__lista">
                       <li
                         class="item"
-                        *ngFor="let turno of turnos"
+                        *ngFor="let turno of turnos; let i = index"
                       >
-                        <div class="item-row item-row__turno--activo">
+                        <div class="item-row item-row__turno--activo" [id]="'turno'+i.toString()">
                           <div class="item-col item-hora-totem fixed">
                             <i class="fa fa-clock-o fa-3x" aria-hidden="true"></i>
                             <p>
@@ -146,6 +146,7 @@
                             <button
                               type="button"
                               class="btn btn-primary"
+                              (click)="asignarNuevoTurno(i)"
                             >
                               Seleccionar
                             </button>

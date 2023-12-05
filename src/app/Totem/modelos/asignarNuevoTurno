@@ -1,0 +1,17 @@
+export interface INuevoTurno {
+  Codigo: number
+  Mensaje: string
+  IdRequest: any
+  Exito: boolean
+  Mensajes: any[]
+  HasException: boolean
+}
+
+export class NuevoTurno implements INuevoTurno{
+  Codigo: number
+  Mensaje: string
+  IdRequest: any
+  Exito: boolean
+  Mensajes: any[]
+  HasException: boolean
+}

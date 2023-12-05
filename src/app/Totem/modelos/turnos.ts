@@ -1,3 +1,22 @@
+export interface IAsignarNuevoTurno {
+  Codigo: number
+  Mensaje: string
+  IdRequest: any
+  Exito: boolean
+  Mensajes: any[]
+  HasException: boolean
+}
+
+export class AsignarNuevoTurno implements IAsignarNuevoTurno{
+  Codigo!: number
+  Mensaje!: string
+  IdRequest!: any
+  Exito!: boolean
+  Mensajes!: any[]
+  HasException!: boolean
+}
+
+
 export interface ITurnos {
   Turnos: ITurno[];
   Codigo: number;

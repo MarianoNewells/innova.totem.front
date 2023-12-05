@@ -54,7 +54,7 @@ export class ListaDeEstudiosComponent implements OnInit{
       if (datos) {
         this.estudios = datos;
         if (this.estudios.Estudios.length == 0) {
-          this.tituloPantalla = 'No hay turnos disponibles';
+          this.tituloPantalla = 'No hay estudios disponibles';
         }
         else{
           this.estudios.Estudios.map(item=>{

@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
 import { ApisBackEndService } from '../servicios/apis-back-end.service';
 import { Router } from '@angular/router';
-import { AlertService } from '../servicios/alert.service';
+import { AlertService, AlertType } from '../servicios/alert.service';
 import { HttpClient } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Persona } from '../modelos/dni';
 import { Servicios } from '../modelos/servicios';
 import { PrestacionDelServicio } from '../modelos/prestacionesDelServicio';
 import { TurnosCreado } from '../modelos/turnosCreado';
+import { Cobertura } from '../modelos/coberturas';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-listado-de-servicios-prestacion-turnosDisponibles',
@@ -26,8 +28,9 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
   turnos: TurnosCreado[] = [];
   idCentroDeAtencion: string = '';
   dCobertura: string = '';
-
-
+  idFinanciador : number=0
+  idPlan: number=0
+  idPrestacion:number=0
 
 
   //Variables para transportar entre funciones
@@ -67,12 +70,15 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
       try {
         // Intenta convertir la cadena JSON a un objeto
         const dCoberturaObjeto = JSON.parse(dCobertura);
-    
+        const cober:Cobertura = JSON.parse(dCobertura);
+        this.idFinanciador = cober.Financiador._Id
+        this.idPlan = cober.Plan._Id
+
         // Me fijo si tiene el dato IdCobertura 
         if ('idCobertura' in dCoberturaObjeto) {
           // Le doy el valor idcovertura a una const
-          const idCobertura = dCoberturaObjeto.idCobertura;
-    
+          const idCobertura = dCoberturaObjeto.idCobertura
+     
           // Haz lo que necesites con el idCobertura
           console.log('ID de Cobertura:', idCobertura);
         } else {
@@ -104,10 +110,45 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
 
   seleccionarPrestacion(prestacion: PrestacionDelServicio) {
     this.obtenerTurnosDisponibles(this.idServicioSeleccionado, prestacion._Id)
+    this.idPrestacion = prestacion._Id
     this.titulosPantalla[2] = prestacion._Nombre;
     this.irAlPaso(3);
   }
 
+  asignarNuevoTurno(index:number){
+    // this.turnos[index].IdTurno
+    // this.turnos[index].IdRecurso 
+    // this.persona._Id
+     const pTipoDeTurno:number=0 // 0 Significa tipo de turno control.
+    // this.idFinanciador
+    // this.idPlan 
+    // this.idPrestacion 
+    // this.idServicioSeleccionado
+    Swal.fire({
+      title: "Asinación de turno",
+      text: "¿Confirma la asignación del nuevo turno?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Aceptar",
+      cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.value) {
+      this.api.getAsignarNuevoTurno(this.turnos[index].IdTurno,this.persona._Id,pTipoDeTurno, this.idPrestacion,this.idFinanciador,this.idPlan).subscribe((d)=>{
+        if(d.Exito){
+          // Remover la fila correspondiente al turno anulado.
+          const id:string = "turno"+index.toString()
+          const element = <HTMLElement> document.getElementById(id)
+          element.remove()
+          this.alert.mostrarAlerta(
+            'Turno asignado exitosamente',
+            AlertType.Success,
+            4
+          );
+        }
+      })
+    }
+  })
+  }
 
   //Funciones para Obtener
   obtenerServicios() {
