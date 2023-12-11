@@ -177,41 +177,54 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     let el: HTMLElement = this.CloseModalToken.nativeElement;
     el.click();
 
-    //Disparar proceso de autorecepcion.
-    this.api.getAutorecepcion(this.turno.idTurno, token).subscribe((data) => {
-       if (data.Exito) {
-        var blob = new Blob([this._base64ToArrayBuffer(data.ReporteTicketString)], {
-          type: 'application/pdf',
-        });
-        this.pdfurl = URL.createObjectURL(blob);
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = this.pdfurl;
-        document.body.appendChild(iframe);
-        if(iframe.contentWindow!=null){
-          iframe.contentWindow.print();
-        }
-       
-         
-        this.modalRef = this.modalService.open(RecepcionExitosaComponent, { size: 'lg', centered: true });
-        
-        setTimeout(() => {
-          this.modalRef.close()
-          }, 15000);
+  Swal.fire({
+      title: "Autorecepción de turno",
+      text: "¿Confirma la autorecepción del turno seleccionado?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Aceptar",
+      cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.value) {
+        //Disparar proceso de autorecepcion.
+        this.api.getAutorecepcion(this.turno.idTurno, token).subscribe((data) => {
+          if (data.Exito) {
+          var blob = new Blob([this._base64ToArrayBuffer(data.ReporteTicketString)], {
+            type: 'application/pdf',
+          });
+          this.pdfurl = URL.createObjectURL(blob);
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          iframe.src = this.pdfurl;
+          document.body.appendChild(iframe);
+          if(iframe.contentWindow!=null){
+            iframe.contentWindow.print();
+          }
+                
+          this.modalRef = this.modalService.open(RecepcionExitosaComponent, { size: 'lg', centered: true });
+          
+          setTimeout(() => {
+            this.modalRef.close()
+            }, 15000);
 
-        this.router.navigate(['/']);
-      } else{
-        let error:string = "Se ha producido un error en el proceso de " + data.ErrorProceso
-        if(data.ErrorMensaje.includes("Token")){
-          error+=".TOKEN INVALIDO."
+          this.router.navigate(['/']);
+        } else{
+          let error:string = "Se ha producido un error en el proceso de " + data.ErrorProceso
+          if(data.ErrorMensaje.includes("Token")){
+            error+=".TOKEN INVALIDO."
+          }
+          this.alert.mostrarAlerta(
+            error,
+            AlertType.Danger,
+            7
+          );
         }
-        this.alert.mostrarAlerta(
-          error,
-          AlertType.Danger,
-          7
-        );
-      }
-    });
+      });  
+    }
+  })
+
+
+   
 
     // this.http
     //   .get('./assets/reportePdf.txt', { responseType: 'text' })

@@ -150,6 +150,14 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
   })
   }
 
+  verMasTurnos(index:number){
+    sessionStorage.setItem("turnoSeleccionado",JSON.stringify(this.turnos[index]))
+    sessionStorage.setItem("idServicioSeleccionado",this.idServicioSeleccionado)
+    sessionStorage.setItem("idPrestacion",JSON.stringify(this.idPrestacion))
+    sessionStorage.setItem("idPlan",JSON.stringify(this.idPlan))
+    this.router.navigate(['grillaDeTurnos'])
+  }
+  
   //Funciones para Obtener
   obtenerServicios() {
     this.api.getServicios(this.idCentroDeAtencion).subscribe((response: any) => {
@@ -205,7 +213,6 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
     }
   }
   
-
   salir(){
     this.router.navigate(['/']);
   }

@@ -16,6 +16,7 @@ import { TicketParaRetirarEstudio } from '../modelos/ticketParaRetirarEstudio';
 import { Acciones } from '../modelos/acciones';
 import { Servicios } from '../modelos/servicios';
 import { AnulacionDeTurno } from '../modelos/anulacionDeTurno';
+import { FechasDeTurnos } from '../modelos/fechasDeTurnos';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +32,8 @@ export class ApisBackEndService {
 
   getInicializacionTotem() {
     const endPoint = this.urlBase + 'PantallaAutoGestion';
-     return this.http.get<InicializacionTotem>(endPoint);
+    const ret = this.http.get<InicializacionTotem>(endPoint);
+     return ret
   }
 
   getAcciones(idTerminal: number){
@@ -214,5 +216,21 @@ export class ApisBackEndService {
       params: params
     };
     return this.http.get<AsignarNuevoTurno>(endPoint, httpOptions);
+  }
+  getFechasTurnosDelMedico(IdRecurso:number,IdServicio:number,IdCentroAtencion:number,pTipoDeTurno:number,IdPrestacion:number,IdPlan:number) {
+    const endPoint = this.urlBase + 'ObtenerFechasTurnosDelMedico';
+    let params = new HttpParams();
+    params = params.append('IdRecurso', IdRecurso)
+    params = params.append('IdServicio', IdServicio);
+    params = params.append('IdCentroAtencion', IdCentroAtencion);
+    params = params.append('pTipoDeTurno', pTipoDeTurno);
+    params = params.append('IdPrestacion', IdPrestacion);
+    params = params.append('IdPlan', IdPlan);
+    let httpOptions = {
+      headers: this.basicHeader,
+      params: params
+    };
+    const ret= this.http.get<FechasDeTurnos>(endPoint, httpOptions);
+    return ret
   }
 }

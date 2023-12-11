@@ -28,7 +28,9 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
-import { BnNgIdleService } from 'bn-ng-idle'; // Para detectar inactividad del usuario
+import { BnNgIdleService } from 'bn-ng-idle';
+import { GrillaDeTurnosComponent } from './Totem/grilla-de-turnos/grilla-de-turnos.component'; // Para detectar inactividad del usuario
+import { AgGridModule } from 'ag-grid-angular';
 
 registerLocaleData(localeEs)
 
@@ -50,6 +52,7 @@ registerLocaleData(localeEs)
     RecepcionRetirarEstudioComponent,
     ListadoDeCentrosComponent,
     ListadoDeServiciosPrestacionTurnosDisponiblesComponent,
+    GrillaDeTurnosComponent,
     
   ],
   imports: [
@@ -64,6 +67,7 @@ registerLocaleData(localeEs)
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
+    AgGridModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

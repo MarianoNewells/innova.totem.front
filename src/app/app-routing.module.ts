@@ -10,6 +10,7 @@ import { RecepcionExitosaComponent } from './Totem/recepcion-exitosa/recepcion-e
 import { ListaDeCoberturasComponent } from './Totem/lista-de-coberturas/lista-de-coberturas.component';
 import { ListadoDeCentrosComponent } from './Totem/listado-de-centros/listado-de-centros.component';
 import { ListadoDeServiciosPrestacionTurnosDisponiblesComponent } from './Totem/listado-de-servicios-prestacion-turnosDisponibles/listado-de-servicios-prestacion-turnosDisponibles.component';
+import { GrillaDeTurnosComponent } from './Totem/grilla-de-turnos/grilla-de-turnos.component';
 const routes: Routes = [
   { path: '', component: BienvenidaComponent },
   { path: 'dni', component: DniComponent }, // primero
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'listaDeEstudios', component: ListaDeEstudiosComponent },
   { path: 'listaDeCoberturas', component: ListaDeCoberturasComponent }, //  PRIMER CIRCUITO DE TURNOS
   { path: 'listadeServiciosPrestacionTurnos', component: ListadoDeServiciosPrestacionTurnosDisponiblesComponent }, // SEGUNDO CIRCUITO DE TURNOS
+  { path: 'grillaDeTurnos', component: GrillaDeTurnosComponent }, // SEGUNDO CIRCUITO DE TURNOS
 ];
 
 @NgModule({
