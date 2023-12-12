@@ -17,6 +17,10 @@ import { Acciones } from '../modelos/acciones';
 import { Servicios } from '../modelos/servicios';
 import { AnulacionDeTurno } from '../modelos/anulacionDeTurno';
 import { FechasDeTurnos } from '../modelos/fechasDeTurnos';
+import { DatePipe } from '@angular/common';
+import { HorarioDiaMedico } from '../modelos/horariosDiasMedico';
+import { lastValueFrom } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root',
@@ -28,12 +32,13 @@ export class ApisBackEndService {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   };
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient ,private datePipe: DatePipe ) {
+    
+  }
 
   getInicializacionTotem() {
     const endPoint = this.urlBase + 'PantallaAutoGestion';
-    const ret = this.http.get<InicializacionTotem>(endPoint);
-     return ret
+    return this.http.get<InicializacionTotem>(endPoint);
   }
 
   getAcciones(idTerminal: number){
@@ -230,7 +235,25 @@ export class ApisBackEndService {
       headers: this.basicHeader,
       params: params
     };
-    const ret= this.http.get<FechasDeTurnos>(endPoint, httpOptions);
-    return ret
+    return this.http.get<FechasDeTurnos>(endPoint, httpOptions);
+  }
+  async getHorariosDiaMedico(IdRecurso:number,IdServicio:number,IdCentroAtencion:number,pTipoDeTurno:number,IdPrestacion:number,FechaTurno:Date) {
+    const endPoint = this.urlBase + 'ObtenerHorariosTurno';
+    let params = new HttpParams();
+    params = params.append('IdServicio', IdServicio);
+    params = params.append('IdRecurso', IdRecurso)
+    params = params.append('IdCentroAtencion', IdCentroAtencion);
+    params = params.append('IdPrestacion', IdPrestacion);
+    const fechaString = this.datePipe.transform(FechaTurno,"dd/MM/yyyy")
+    if(fechaString) {
+      params = params.append('fechaTurno', fechaString )
+    };
+    params = params.append('pTipoDeTurno', pTipoDeTurno);
+
+    let httpOptions = {
+      headers: this.basicHeader,
+      params: params
+    };
+     return await lastValueFrom(this.http.get<HorarioDiaMedico>(endPoint, httpOptions))
   }
 }

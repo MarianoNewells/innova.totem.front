@@ -27,10 +27,11 @@ import { ListadoDeServiciosPrestacionTurnosDisponiblesComponent } from './Totem/
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import localeEs from '@angular/common/locales/es';
-import { registerLocaleData } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { BnNgIdleService } from 'bn-ng-idle';
 import { GrillaDeTurnosComponent } from './Totem/grilla-de-turnos/grilla-de-turnos.component'; // Para detectar inactividad del usuario
 import { AgGridModule } from 'ag-grid-angular';
+import { DatePipe } from '@angular/common';
 
 registerLocaleData(localeEs)
 
@@ -67,13 +68,14 @@ registerLocaleData(localeEs)
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
-    AgGridModule
+    AgGridModule,
+    CommonModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: SpinnerInterceptor,
     multi: true,
-  },BnNgIdleService],
+  },BnNgIdleService,DatePipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
