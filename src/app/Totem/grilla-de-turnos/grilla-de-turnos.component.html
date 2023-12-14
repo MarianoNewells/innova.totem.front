@@ -1,9 +1,18 @@
+<div class="title-totem">
+  <i class="fa fa-caret-right" aria-hidden="true"></i>
+  {{ mesActivo }}
+</div>
+<div>
+  <button #btnRetroceder [disabled]="true" (click)="retrocederUnaSemana()"><</button>
+  <button #btnAvanzar [disabled]="false" (click)="avanzarUnaSemana()">  ></button>
+</div>
 <div class="content">
     <!-- The AG Grid component, with Dimensions, CSS Theme, Row Data, and Column Definition -->
     <ag-grid-angular #myGrid
       style="width: 100%; height: 350px;"
       [class]="themeClass"
       [columnDefs]="colDefs"
+      (cellClicked)='onCellClicked($event)'>
       >
     </ag-grid-angular>
   </div>

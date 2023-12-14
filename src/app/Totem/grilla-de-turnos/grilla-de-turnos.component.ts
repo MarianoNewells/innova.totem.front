@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular'; // Angular Grid Logic
 import { ColDef } from 'ag-grid-community'; // Column Definitions Interface
 import { TurnosCreado } from '../modelos/turnosCreado';
@@ -52,8 +52,11 @@ interface IRow {
 })
 
 export class GrillaDeTurnosComponent implements OnInit  {
+  // Obtener referencia de la grilla.
   @ViewChild('myGrid') grid!: AgGridAngular;
-  // Row Data: The data to be displayed.
+  @ViewChild('btnRetroceder') btnRetroceder!: ElementRef;
+  @ViewChild('btnAvanzar') btnAvanzar!: ElementRef;
+  // Datasource de la grilla.
   rowData: IRow[] = [];
   Horarios: IHorario[]=[]
   // Modelo de las columnas de la grilla.
@@ -83,9 +86,17 @@ export class GrillaDeTurnosComponent implements OnInit  {
   idPrestacion:number=885040
   idPlan:number=1275
   Dias: IDia[]=[]
-  activePos:number=0
+  //***************************************
+  // Propiedades fundamentales del la clase.
+  // Contienen las posiciones de la semana activa en el arreglo this.Dias
+  firstPos:number=0
   lastPos:number=6
+  //***************************************
   max:number=0
+  mesActivo:string=""
+  horarioSeleccionado:string=""
+  turnoSeleccionado:number=0
+  fechaSeleccionada:Date= new Date()
 
   constructor( private api: ApisBackEndService,
     private router: Router,
@@ -129,9 +140,101 @@ export class GrillaDeTurnosComponent implements OnInit  {
       })
      this.fillHeadersColumns()
      this.fillDataGrid()
+     this.BuscarMes()
     })
   }
- 
+
+onCellClicked (e:any){
+  this.horarioSeleccionado = e.value
+  const field:string = e.colDef.field;
+  this.rowData.forEach((row,index)=>{
+    switch(field){
+      case "dia1":
+          if(row.dia1==this.horarioSeleccionado){
+            this.turnoSeleccionado = row.turno1
+            this.fechaSeleccionada = this.Dias[0].Fecha
+          }
+          break
+      case "dia2":
+        if(row.dia2==this.horarioSeleccionado){
+          this.turnoSeleccionado = row.turno2
+          this.fechaSeleccionada = this.Dias[1].Fecha
+        }
+        break  
+    case "dia3":
+      if(row.dia3==this.horarioSeleccionado){
+        this.turnoSeleccionado = row.turno3
+        this.fechaSeleccionada = this.Dias[2].Fecha
+      }
+      break 
+    case "dia4":
+      if(row.dia4==this.horarioSeleccionado){
+        this.turnoSeleccionado = row.turno4
+        this.fechaSeleccionada = this.Dias[3].Fecha
+      }
+      break 
+    case  "dia5":
+      if(row.dia5==this.horarioSeleccionado){
+        this.turnoSeleccionado = row.turno5
+        this.fechaSeleccionada = this.Dias[4].Fecha
+      }
+      break
+    case  "dia6":
+      if(row.dia6==this.horarioSeleccionado){
+        this.turnoSeleccionado = row.turno6
+        this.fechaSeleccionada = this.Dias[5].Fecha
+      }
+      break
+    case  "dia7":
+      if(row.dia7==this.horarioSeleccionado){
+        this.turnoSeleccionado = row.turno7
+        this.fechaSeleccionada = this.Dias[6].Fecha
+      }
+      break         
+    }
+  })
+}
+
+avanzarUnaSemana(){
+  this.btnRetroceder.nativeElement.disabled=false
+  this.firstPos = this.lastPos+1
+  this.lastPos= this.lastPos+7
+  this.fillHeadersColumns()
+  this.fillDataGrid()
+  this.BuscarMes()
+  if(this.lastPos+1==this.Dias.length){
+    this.btnAvanzar.nativeElement.disabled=true
+  }
+}
+
+retrocederUnaSemana(){
+  this.btnAvanzar.nativeElement.disabled=false
+  this.lastPos= this.lastPos-7
+  this.firstPos = this.lastPos-6
+  this.fillHeadersColumns()
+  this.fillDataGrid()
+  this.BuscarMes()
+  if(this.firstPos==0){
+    this.btnRetroceder.nativeElement.disabled=true
+  }
+}
+
+BuscarMes(){
+  this.mesActivo = ""
+  const mes = this.Dias[this.firstPos].Fecha.toLocaleDateString("es-ES", { month: 'long' }).toUpperCase(); 
+  const año = this.Dias[this.firstPos].Fecha.toLocaleDateString("es-ES", { year: 'numeric'  }).toString(); 
+  let flag = true
+  this.mesActivo = mes + " "+ año
+  for (let i = this.firstPos; i < this.lastPos+1; i++) {
+    const mes_ = this.Dias[i].Fecha.toLocaleDateString("es-ES", { month: 'long' }).toUpperCase(); 
+    const año_ =this.Dias[i].Fecha.toLocaleDateString("es-ES", { year: 'numeric'  }).toString(); 
+    if(mes!=mes_ && flag){
+      this.mesActivo = this.mesActivo + " / " + mes_ + " "+ año_
+      flag=false
+    }
+  }
+}
+
  fillHeadersColumns(){
   this.completarTitulosColumnas()
   const def = this.grid.api.getColumnDefs()
@@ -150,7 +253,7 @@ export class GrillaDeTurnosComponent implements OnInit  {
  
   completarTitulosColumnas(){
     let cont=0
-    for (let i = this.activePos; i < this.lastPos+1; i++) {
+    for (let i = this.firstPos; i < this.lastPos+1; i++) {
         cont++
         switch(cont){
           case 1:
@@ -181,13 +284,12 @@ export class GrillaDeTurnosComponent implements OnInit  {
  fillDataGrid(){
     let cont=0
     // Recorrer por las posiciones de las fechas de la semana activa.
-    for (let i = this.activePos; i < this.lastPos+1; i++) {
+    for (let i = this.firstPos; i < this.lastPos+1; i++) {
       const Fecha:Date = this.Dias[i].Fecha
       // Buscar los horarios de la fecha
       this.api.getHorariosDiaMedico(this.idRecurso,this.idServicioSeleccionado,this.idCentroDeAtencion,0,this.idPrestacion,Fecha).then((data)=>{
         cont++ // Posicionar la columna que se va a completar
         this.Horarios = data.Horarios
-
         // Crear la cantidad de filas que necesita el datasource de la grilla.
         if(this.Horarios.length>this.max)
         { 
@@ -250,7 +352,7 @@ export class GrillaDeTurnosComponent implements OnInit  {
         this.grid.api.setGridOption("rowData",this.rowData)
         this.grid.api.refreshCells()
       })//this.api.getHorariosDiaMedico  
-    }//for (let i = this.activePos; i < this.lastPos+1; i++)
+    }//for (let i = this.firstPos; i < this.lastPos+1; i++)
    }   
  }
 
