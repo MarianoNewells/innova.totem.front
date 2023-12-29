@@ -18,6 +18,7 @@ export class InicializacionTotem implements IInicializacionTotem {
   ListRecomendacion!: ListRecomendacion[];
   IdSalaDeEspera!: number;
   IdCentroDeAtencion!: number;
+  SegundosFinSesion!:number
 }
 
 export interface ListRecomendacion {
