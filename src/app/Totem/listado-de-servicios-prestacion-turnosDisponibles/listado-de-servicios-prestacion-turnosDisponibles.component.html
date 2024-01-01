@@ -9,10 +9,10 @@
             >
               <div class="">
                 <a class="btn-totem-back pointer d-flex align-items-center"
+                (click)="volver()"
                   ><i
                     class="fa fa-chevron-left mr-3"
                     aria-hidden="true"
-                    (click)="volver()"
                   ></i>
                   Volver
                 </a>
@@ -42,7 +42,10 @@
                 <div class="col-12 col-md-auto mb-2">
                   <div class="title-totem">
                     <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    {{ titulosPantalla[pasoActual - 1] }}
+                    Titulo Generico
+                  </div>
+                  <div class="subtitle-totem">
+                    {{ getTituloSegunPaso((pasoActual$ | async) || 0) }}
                   </div>
                 </div>
                 <!--Fin Titulos H1 y p-->
@@ -69,7 +72,7 @@
             <div class="col-11 lista-turnos-totem">
               <div class="scroll-table-totem my-3">
                 <!-- Paso 1: Servicios -->
-                <ng-container *ngIf="pasoActual === 1">
+                <ng-container *ngIf="(pasoActual$ | async) === 1">
                   <ul class="item-list lista-turnos-totem__lista">
                     <li class="item" *ngFor="let servicio of servicios">
                       <div class="item-row item-row__turno--activo">
@@ -93,7 +96,7 @@
                 </ng-container>
             
                 <!-- Paso 2: Prestaciones -->
-                <ng-container *ngIf="pasoActual === 2">
+                <ng-container *ngIf="(pasoActual$ | async) === 2">
                   <ul class="item-list lista-turnos-totem__lista">
                     <li class="item" *ngFor="let prestacion of prestaciones">
                       <div class="item-row item-row__turno--activo">
@@ -116,7 +119,7 @@
                 </ng-container>
             
                 <!-- Paso 3: Turnos -->
-                <ng-container *ngIf="pasoActual === 3">
+                <ng-container *ngIf="(pasoActual$ | async) === 3">
                                      <ul class="item-list lista-turnos-totem__lista">
                       <li
                         class="item"

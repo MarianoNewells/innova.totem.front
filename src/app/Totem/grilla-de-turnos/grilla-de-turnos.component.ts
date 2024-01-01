@@ -4,46 +4,18 @@ import { ColDef } from 'ag-grid-community'; // Column Definitions Interface
 import { TurnosCreado } from '../modelos/turnosCreado';
 import { ApisBackEndService } from '../servicios/apis-back-end.service';
 import { Router } from '@angular/router';
-import { AlertService } from '../servicios/alert.service';
+import { AlertService, AlertType } from '../servicios/alert.service';
 import { HttpClient } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IDia } from '../modelos/fechasDeTurnos';
 import { HorarioDiaMedico, IHorario } from '../modelos/horariosDiasMedico';
-
-interface IRow {
-  dia1: string;
-  turno1:number;
-  dia2: string;
-  turno2:number;
-  dia3: string;
-  turno3:number;
-  dia4: string;
-  turno4:number;
-  dia5: string;
-  turno5:number;
-  dia6: string;
-  turno6:number;
-  dia7: string;
-  turno7:number;
-}
-
- export class Row implements IRow{
-  dia1!: string;
-  turno1!:number;
-  dia2!: string;
-  turno2!:number;
-  dia3!: string;
-  turno3!:number;
-  dia4!: string;
-  turno4!:number;
-  dia5!: string;
-  turno5!:number;
-  dia6!: string;
-  turno6!:number;
-  dia7!: string;
-  turno7!:number;
- } 
-
+import Swal from 'sweetalert2';
+import { PasoService } from '../servicios/PasoActualService';
+import { RecepcionExitosaComponent } from '../recepcion-exitosa/recepcion-exitosa.component';
+import { Persona } from '../modelos/dni';
+import { Cobertura } from '../modelos/coberturas';
+import { AppointmentSelectorComponent, FechaData } from './selector/appointment-selector/appointment-selector.component';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-grilla-de-turnos',
@@ -52,308 +24,305 @@ interface IRow {
 })
 
 export class GrillaDeTurnosComponent implements OnInit  {
-  // Obtener referencia de la grilla.
-  @ViewChild('myGrid') grid!: AgGridAngular;
-  @ViewChild('btnRetroceder') btnRetroceder!: ElementRef;
-  @ViewChild('btnAvanzar') btnAvanzar!: ElementRef;
-  // Datasource de la grilla.
-  rowData: IRow[] = [];
-  Horarios: IHorario[]=[]
-  // Modelo de las columnas de la grilla.
-  colDefs: ColDef<IRow>[] = [
-    { field: 'dia1', colId:"col1" , headerName: "" },
-    { field: 'dia2', colId:"col2",  headerName: "" },
-    { field: 'dia3', colId:"col3",  headerName: "" },
-    { field: 'dia4', colId:"col4",  headerName: "" },
-    { field: 'dia5', colId:"col5",  headerName: "" },
-    { field: 'dia6', colId:"col6",  headerName: "" },
-    { field: 'dia7', colId:"col7",  headerName: "" },
-  ];
+  public retrocesoHabilitado: boolean = false;
 
-  // Títulos de las columnas.
-  titCol1:string="aaa"
-  titCol2:string=""
-  titCol3:string=""
-  titCol4:string=""
-  titCol5:string=""
-  titCol6:string=""
-  titCol7:string=""
+  modalRef:any
+  pdfurl: string = '';
+
   themeClass:string ="ag-theme-quartz";
   turno:TurnosCreado=new TurnosCreado
-  idRecurso:number=2504
-  idServicioSeleccionado:number=274
-  idCentroDeAtencion:number=6
-  idPrestacion:number=885040
-  idPlan:number=1275
-  Dias: IDia[]=[]
-  //***************************************
-  // Propiedades fundamentales del la clase.
-  // Contienen las posiciones de la semana activa en el arreglo this.Dias
-  firstPos:number=0
-  lastPos:number=6
-  //***************************************
+  idRecurso:number=0
+  idServicioSeleccionado:number=0
+  idCentroDeAtencion:number=0
+  idPrestacion:number=0
+  idPlan:number=0
   max:number=0
   mesActivo:string=""
   horarioSeleccionado:string=""
-  turnoSeleccionado:number=0
+  turnoSeleccionado:any=0
   fechaSeleccionada:Date= new Date()
+  persona: Persona = new Persona();
+  nombreCompleto: string = '';
+  dni: string = '';
 
+  @ViewChild(AppointmentSelectorComponent) appointmentSelectorComponent!: AppointmentSelectorComponent;
+  fechasConHorarios$: Observable<FechaData[]> | undefined;
+  
   constructor( private api: ApisBackEndService,
     private router: Router,
     private alert: AlertService,
     private http: HttpClient,
-    private modalService: NgbModal,){
-  //   let d = sessionStorage.getItem("turnoSeleccionado")
-  //   if(d){
-  //     this.turno = JSON.parse(d)
-  //   }
-  //  this.idRecurso=this.turno.IdRecurso
-  //   d = sessionStorage.getItem("idServicioSeleccionado")
-  //   if(d){
-  //     this.idServicioSeleccionado = Number(JSON.parse(d))
-  //   }
-  //   d = sessionStorage.getItem('idCentroDeAtencion');
-  //   if(d){
-  //     this.idCentroDeAtencion = Number(JSON.parse(d))
-  //   }
-  //   d = sessionStorage.getItem('idPrestacion');
-  //   if(d){
-  //     this.idPrestacion = Number(JSON.parse(d))
-  //   }
-  //   d = sessionStorage.getItem('idPlan');
-  //   if(d){
-  //     this.idPlan = Number(JSON.parse(d))
-  //   } 
-   
- 
+    private modalService: NgbModal,
+    private pasoActualService: PasoService){
+
+      
+      
+
+      const dCobertura = sessionStorage.getItem('CoberturaPaciente');
+
+      if (dCobertura) {
+        try {
+          // Intenta convertir la cadena JSON a un objeto
+          const dCoberturaObjeto = JSON.parse(dCobertura);
+          const cober:Cobertura = JSON.parse(dCobertura);
+          this.idPlan = cober.Plan._Id
+  
+          // Me fijo si tiene el dato IdCobertura 
+          if ('idCobertura' in dCoberturaObjeto) {
+            // Le doy el valor idcovertura a una const
+            const idCobertura = dCoberturaObjeto.idCobertura
+       
+            // Haz lo que necesites con el idCobertura
+            console.log('ID de Cobertura:', idCobertura);
+          } else {
+            console.error('El objeto no tiene la propiedad "idCobertura".');
+          }
+        } catch (error) {
+          console.error('Error al analizar la cadena JSON:', error);
+        }
+      }
+      
+      const datoPersona = sessionStorage.getItem('Persona');
+      if (datoPersona) {
+        this.persona = JSON.parse(datoPersona);
+        this.nombreCompleto =
+          this.persona._apellido + ', ' + this.persona._Nombre;
+          this.dni = this.persona._Documento._Numero;
+      }
+
+    let d = sessionStorage.getItem("turnoSeleccionado")
+    if(d){
+      this.turno = JSON.parse(d)
+    }
+   this.idRecurso=this.turno.IdRecurso
+    d = sessionStorage.getItem("idServicioSeleccionado")
+    if(d){
+      this.idServicioSeleccionado = Number(JSON.parse(d))
+    }
+    d = sessionStorage.getItem('idCentroDeAtencion');
+    if(d){
+      this.idCentroDeAtencion = Number(JSON.parse(d))
+    }
+    d = sessionStorage.getItem('idPrestacion');
+    if(d){
+      this.idPrestacion = Number(JSON.parse(d))
+    }
+    d = sessionStorage.getItem('idPlan');
+    if(d){
+      this.idPlan = Number(JSON.parse(d))
+    } 
+  }
+
+
+  _base64ToArrayBuffer(base64: string) {
+    const binary_string = window.atob(base64);
+    const len = binary_string.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
+  }
+
+  todasLasFechas: any[] = [];
+
+  ngOnInit(): void {
+    this.fechasConHorarios$ = of([]);
+
+    this.cargarFechas();
+    this.mostrarHora();
+
+    this.mesActivo = this.getMesesPresentes(this.todasLasFechas);
+
+    this.retrocesoHabilitado = false;
   }
   
-  ngOnInit(): void {
-    this.api.getFechasTurnosDelMedico(this.idRecurso,this.idServicioSeleccionado,this.idCentroDeAtencion,0,this.idPrestacion,this.idPlan).subscribe((data)=>{
-      this.Dias = data.Dias
-      // Completar las propiedades Fecha como Date y TituloColumna
-      this.Dias.map((f)=>{
-        f.Fecha = new Date(f.FechaTurno);
-        const nomDia = f.Fecha.toLocaleDateString("es-ES", { weekday: 'long' }).substring(0,3).toUpperCase(); 
-        const numDia = f.Fecha.toLocaleDateString("es-ES", { day: 'numeric'  }).toString(); 
-        f.TituloColumna = nomDia+" "+numDia
-      })
-     this.fillHeadersColumns()
-     this.fillDataGrid()
-     this.BuscarMes()
-    })
-  }
-
-onCellClicked (e:any){
-  this.horarioSeleccionado = e.value
-  const field:string = e.colDef.field;
-  this.rowData.forEach((row,index)=>{
-    switch(field){
-      case "dia1":
-          if(row.dia1==this.horarioSeleccionado){
-            this.turnoSeleccionado = row.turno1
-            this.fechaSeleccionada = this.Dias[0].Fecha
-          }
-          break
-      case "dia2":
-        if(row.dia2==this.horarioSeleccionado){
-          this.turnoSeleccionado = row.turno2
-          this.fechaSeleccionada = this.Dias[1].Fecha
-        }
-        break  
-    case "dia3":
-      if(row.dia3==this.horarioSeleccionado){
-        this.turnoSeleccionado = row.turno3
-        this.fechaSeleccionada = this.Dias[2].Fecha
-      }
-      break 
-    case "dia4":
-      if(row.dia4==this.horarioSeleccionado){
-        this.turnoSeleccionado = row.turno4
-        this.fechaSeleccionada = this.Dias[3].Fecha
-      }
-      break 
-    case  "dia5":
-      if(row.dia5==this.horarioSeleccionado){
-        this.turnoSeleccionado = row.turno5
-        this.fechaSeleccionada = this.Dias[4].Fecha
-      }
-      break
-    case  "dia6":
-      if(row.dia6==this.horarioSeleccionado){
-        this.turnoSeleccionado = row.turno6
-        this.fechaSeleccionada = this.Dias[5].Fecha
-      }
-      break
-    case  "dia7":
-      if(row.dia7==this.horarioSeleccionado){
-        this.turnoSeleccionado = row.turno7
-        this.fechaSeleccionada = this.Dias[6].Fecha
-      }
-      break         
-    }
-  })
-}
-
-avanzarUnaSemana(){
-  this.btnRetroceder.nativeElement.disabled=false
-  this.firstPos = this.lastPos+1
-  this.lastPos= this.lastPos+7
-  this.fillHeadersColumns()
-  this.fillDataGrid()
-  this.BuscarMes()
-  if(this.lastPos+1==this.Dias.length){
-    this.btnAvanzar.nativeElement.disabled=true
-  }
-}
-
-retrocederUnaSemana(){
-  this.btnAvanzar.nativeElement.disabled=false
-  this.lastPos= this.lastPos-7
-  this.firstPos = this.lastPos-6
-  this.fillHeadersColumns()
-  this.fillDataGrid()
-  this.BuscarMes()
-  if(this.firstPos==0){
-    this.btnRetroceder.nativeElement.disabled=true
-  }
-}
-
-BuscarMes(){
-  this.mesActivo = ""
-  const mes = this.Dias[this.firstPos].Fecha.toLocaleDateString("es-ES", { month: 'long' }).toUpperCase(); 
-  const año = this.Dias[this.firstPos].Fecha.toLocaleDateString("es-ES", { year: 'numeric'  }).toString(); 
-  let flag = true
-  this.mesActivo = mes + " "+ año
-  for (let i = this.firstPos; i < this.lastPos+1; i++) {
-    const mes_ = this.Dias[i].Fecha.toLocaleDateString("es-ES", { month: 'long' }).toUpperCase(); 
-    const año_ =this.Dias[i].Fecha.toLocaleDateString("es-ES", { year: 'numeric'  }).toString(); 
-    if(mes!=mes_ && flag){
-      this.mesActivo = this.mesActivo + " / " + mes_ + " "+ año_
-      flag=false
-    }
-  }
-}
-
- fillHeadersColumns(){
-  this.completarTitulosColumnas()
-  const def = this.grid.api.getColumnDefs()
-  if(def){
-    def[0].headerName=this.titCol1
-    def[1].headerName=this.titCol2
-    def[2].headerName=this.titCol3
-    def[3].headerName=this.titCol4
-    def[4].headerName=this.titCol5
-    def[5].headerName=this.titCol6
-    def[6].headerName=this.titCol7
-  }
-  this.grid.api.setGridOption("columnDefs",def)
-  this.grid.api.refreshHeader()
- }
- 
-  completarTitulosColumnas(){
-    let cont=0
-    for (let i = this.firstPos; i < this.lastPos+1; i++) {
-        cont++
-        switch(cont){
-          case 1:
-            this.titCol1 = this.Dias[i].TituloColumna
-            break
-          case 2:
-            this.titCol2 = this.Dias[i].TituloColumna
-            break  
-        case  3:
-            this.titCol3 = this.Dias[i].TituloColumna
-            break 
-        case  4:
-          this.titCol4 = this.Dias[i].TituloColumna
-          break 
-        case  5:
-          this.titCol5 = this.Dias[i].TituloColumna
-            break
-        case  6:
-            this.titCol6 = this.Dias[i].TituloColumna
-            break
-        case  7:
-          this.titCol7 = this.Dias[i].TituloColumna
-          break                               
-        }
-      }
-    }
- 
- fillDataGrid(){
-    let cont=0
-    // Recorrer por las posiciones de las fechas de la semana activa.
-    for (let i = this.firstPos; i < this.lastPos+1; i++) {
-      const Fecha:Date = this.Dias[i].Fecha
-      // Buscar los horarios de la fecha
-      this.api.getHorariosDiaMedico(this.idRecurso,this.idServicioSeleccionado,this.idCentroDeAtencion,0,this.idPrestacion,Fecha).then((data)=>{
-        cont++ // Posicionar la columna que se va a completar
-        this.Horarios = data.Horarios
-        // Crear la cantidad de filas que necesita el datasource de la grilla.
-        if(this.Horarios.length>this.max)
-        { 
-          let dif = this.Horarios.length-this.max
-          for (let j = 1; j < dif+1; j++) {
-            let r : Row = new Row 
-            r.dia1=""
-            r.turno1=0
-            r.dia2=""
-            r.turno2=0
-            r.dia3=""
-            r.turno3=0
-            r.dia4=""
-            r.turno4=0
-            r.dia5=""
-            r.turno5=0
-            r.dia6=""
-            r.turno6=0
-            r.dia7=""
-            r.turno7=0
-            this.rowData.push(r)
-          }
-          this.max=this.Horarios.length
-        }
-       
-        // Iterar los horarios que trajo el get y llenar verticalmente una columna.
-        this.Horarios.forEach((h,index)=>{ 
-            switch(cont){
-              case 1:
-                this.rowData[index].dia1 = h.Hora
-                this.rowData[index].turno1 = h.IdTurno
-                break
-              case 2:
-                this.rowData[index].dia2 = h.Hora
-                this.rowData[index].turno2 = h.IdTurno
-                break  
-            case  3:
-              this.rowData[index].dia3 = h.Hora
-              this.rowData[index].turno3 = h.IdTurno
-                break 
-            case  4:
-              this.rowData[index].dia4 = h.Hora
-              this.rowData[index].turno4 = h.IdTurno
-              break 
-            case  5:
-              this.rowData[index].dia5 = h.Hora
-              this.rowData[index].turno5 = h.IdTurno
-                break
-            case  6:
-              this.rowData[index].dia6 = h.Hora
-              this.rowData[index].turno6 = h.IdTurno
-                break
-            case  7:
-              this.rowData[index].dia7 = h.Hora
-              this.rowData[index].turno7 = h.IdTurno
-              break                               
+  cargarFechas(): void {
+    this.api.getFechasTurnosDelMedico(
+      this.idRecurso,
+      this.idServicioSeleccionado,
+      this.idCentroDeAtencion,
+      0,
+      this.idPrestacion,
+      this.idPlan
+    ).subscribe((data) => {
+      console.log(data);
+      this.todasLasFechas = data.Dias.map((dia: IDia) => {
+        const fechaData = {
+          fecha: new Date(dia.FechaTurno),
+          datos: [
+            {
+              titulo: dia.TituloColumna,
+              horarios: []
             }
+          ]
+        };
+  
+        // Después de procesar la primera fecha, cargar sus horarios inmediatamente
+        this.cargarHorariosParaFecha(fechaData);
+  
+        return fechaData;
+      });
+  
+      // Mostrar los primeros 7 días al cargar
+      this.mostrarSiguientesFechas();
+    });
+  }
+  
+  cargarHorariosParaFecha(fechaData: any): void {
+    this.api.getHorariosDiaMedico(
+      this.idRecurso,
+      this.idServicioSeleccionado,
+      this.idCentroDeAtencion,
+      0,
+      this.idPrestacion,
+      fechaData.fecha
+    ).then((horariosData: HorarioDiaMedico) => {
+      console.log(horariosData);
 
-        }) // this.Horarios.forEach 
-        this.grid.api.setGridOption("rowData",this.rowData)
-        this.grid.api.refreshCells()
-      })//this.api.getHorariosDiaMedico  
-    }//for (let i = this.firstPos; i < this.lastPos+1; i++)
-   }   
+      if (!fechaData.DatosTabla) {
+        fechaData.DatosTabla = [{ horarios: horariosData.Horarios }];
+      } else {
+        fechaData.DatosTabla[0].horarios = horariosData.Horarios;
+      }
+    }).catch((error) => {
+      console.error("Error al obtener horarios:", error);
+    });
+  }
+  
+  getMesesPresentes(fechas: any[]): string {
+    const mesesPresentes = new Set<string>();
+  
+    fechas.forEach((fechaData: any) => {
+      const nombreMes = new Intl.DateTimeFormat('es', { month: 'long' }).format(fechaData.fecha);
+      mesesPresentes.add(nombreMes.toUpperCase());
+    });
+  
+    return Array.from(mesesPresentes).join(' / ');
+  }
+
+  formatoFechaComoString(fecha: Date): string {
+    // Puedes utilizar una biblioteca como 'date-fns' o simplemente construir la cadena manualmente según tu formato
+    // Aquí un ejemplo simple, puedes ajustarlo según tus necesidades
+    return `${fecha.getFullYear()}-${fecha.getMonth() + 1}-${fecha.getDate()}`;
+  }
+
+
+  //Esto es una guia de siguiente y anterior
+  indiceMostrar: number = 0;
+  //Esto es una guia de siguiente y anterior
+
+  mostrarSiguientesFechas(): void {
+    const cantidadDiasAMostrar = 7;
+
+    if (this.indiceMostrar + cantidadDiasAMostrar <= this.todasLasFechas.length) {
+      const nuevasFechas = this.todasLasFechas.slice(this.indiceMostrar, this.indiceMostrar + cantidadDiasAMostrar);
+
+      // Rellenar con fechas vacías si es necesario
+      while (nuevasFechas.length < cantidadDiasAMostrar) {
+        nuevasFechas.push({ fecha: null, datos: [] });
+      }
+
+      // Asigna el nuevo valor al observable
+      this.fechasConHorarios$ = of([...nuevasFechas]);
+      this.indiceMostrar += cantidadDiasAMostrar;
+
+      // Habilitar el botón de retroceso solo después de avanzar a la segunda semana
+      this.retrocesoHabilitado = this.indiceMostrar >= 2 * cantidadDiasAMostrar;
+
+      this.mesActivo = this.getMesesPresentes(nuevasFechas);
+    }
+  }
+  
+  mostrarAnterioresFechas(): void {
+    const cantidadDiasAMostrar = 7;
+  
+    if (this.indiceMostrar >= cantidadDiasAMostrar) {
+      this.indiceMostrar -= cantidadDiasAMostrar;
+      const nuevasFechas = this.todasLasFechas.slice(this.indiceMostrar, this.indiceMostrar + cantidadDiasAMostrar);
+      this.fechasConHorarios$ = of([...nuevasFechas]);
+  
+      // Actualiza los meses presentes
+      this.mesActivo = this.getMesesPresentes(nuevasFechas);
+  
+      // Actualizar el estado del botón de retroceso
+      this.retrocesoHabilitado = this.indiceMostrar >= cantidadDiasAMostrar;
+    } else {
+      // Si ya estamos en el inicio, retroceder para mostrar los últimos 7 días
+      this.mostrarUltimosDias();
+  
+      // Actualiza los meses presentes
+      this.mesActivo = this.getMesesPresentes(this.todasLasFechas);
+  
+      // Actualizar el estado del botón de retroceso
+      this.retrocesoHabilitado = false;
+    }
+  }
+  
+  mostrarUltimosDias(): void {
+    const cantidadDiasAMostrar = 7;
+    const ultimasFechas = this.todasLasFechas.slice(-cantidadDiasAMostrar);
+    this.fechasConHorarios$ = of([...ultimasFechas]);
+    this.indiceMostrar = this.todasLasFechas.length - cantidadDiasAMostrar;
+  }
+  
+
+  onCellClicked(e: any) {
+
+  }
+  
+
+
+//onCellClicked refactorizado
+// onCellClicked(event: any): void {
+//   this.horarioSeleccionado = event.value;
+
+//   for (let i = 0; i < this.rowData.length; i++) {
+//     const row = this.rowData[i];
+
+//     for (let j = 1; j <= 7; j++) {
+//       const diaProp: keyof IRow = `dia${j}` as keyof IRow;
+//       const turnoProp: keyof IRow = `turno${j}` as keyof IRow;
+
+//       if (row[diaProp] === this.horarioSeleccionado) {
+//         this.turnoSeleccionado = row[turnoProp];
+//         this.fechaSeleccionada = this.Dias[j].Fecha;
+//         console.log("-----------")
+//         console.log(this.fechaSeleccionada)
+//         Swal.fire({
+//           title: "Pedir turno",
+//           text: `¿Desea confirmar el turno para el horario seleccionado ${this.horarioSeleccionado}?`,
+//           icon: "question",
+//           showCancelButton: true,
+//           confirmButtonText: "Aceptar",
+//           cancelButtonText: "Cancelar",
+//         }).then((result) => {
+//           if (result.value) {
+//             console.log(this.turnoSeleccionado, this.fechaSeleccionada);
+
+//           }
+//         });
+
+//         break;
+//       }
+//     }
+//   }
+// }
+
+   volver() {
+    this.pasoActualService.actualizarPasoActual(3);
+    this.router.navigate(['/listadeServiciosPrestacionTurnos']);
+  }
+
+  hora: any;
+  mostrarHora() {
+    setInterval(() => {
+      this.hora = new Date();
+    }, 1000);
+  }
+  salir(){
+    this.router.navigate(['/']);
+  }
  }
 
 

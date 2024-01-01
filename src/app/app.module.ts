@@ -32,6 +32,8 @@ import { BnNgIdleService } from 'bn-ng-idle';
 import { GrillaDeTurnosComponent } from './Totem/grilla-de-turnos/grilla-de-turnos.component'; // Para detectar inactividad del usuario
 import { AgGridModule } from 'ag-grid-angular';
 import { DatePipe } from '@angular/common';
+import { PasoService } from './Totem/servicios/PasoActualService';
+import { AppointmentSelectorComponent } from './Totem/grilla-de-turnos/selector/appointment-selector/appointment-selector.component';
 
 registerLocaleData(localeEs)
 
@@ -54,6 +56,7 @@ registerLocaleData(localeEs)
     ListadoDeCentrosComponent,
     ListadoDeServiciosPrestacionTurnosDisponiblesComponent,
     GrillaDeTurnosComponent,
+    AppointmentSelectorComponent,
     
   ],
   imports: [
@@ -75,7 +78,7 @@ registerLocaleData(localeEs)
     provide: HTTP_INTERCEPTORS,
     useClass: SpinnerInterceptor,
     multi: true,
-  },BnNgIdleService,DatePipe],
+  },BnNgIdleService,DatePipe,PasoService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

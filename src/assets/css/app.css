@@ -35194,6 +35194,12 @@ pre:last-child {
   font-size: 300%;
 }
 
+.subtitle-totem {
+  color: #0f5daa;
+  font-weight: 400;
+  font-size: 200%;
+}
+
 .leyenda {
   font-weight: 400;
   font-size: 1.5rem;

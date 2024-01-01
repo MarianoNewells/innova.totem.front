@@ -1,0 +1,18 @@
+<div *ngIf="appointmentSelectorsData$ | async as appointmentSelectorsData; else loadingTemplate">
+  <div *ngIf="appointmentSelectorsData.length > 0" class="appointment-selectors-container">
+    <ng-container *ngFor="let fechaData of appointmentSelectorsData">
+      <div *ngIf="fechaData.fecha" class="appointment-selector">
+        <div class="date-header">{{ fechaData.fecha | date: 'dd/MM/yyyy' }}</div>
+        <div *ngFor="let DatosTabla of fechaData.DatosTabla">
+          <div class="time-slot" *ngFor="let horario of DatosTabla.horarios">
+            <div class="time-slot-content">{{ horario.Hora }}</div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loadingTemplate>
+  Loading...
+</ng-template>

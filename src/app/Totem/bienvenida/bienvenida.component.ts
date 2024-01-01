@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApisBackEndService } from '../servicios/apis-back-end.service';
 import { Acciones } from '../modelos/acciones';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-bienvenida',
@@ -49,6 +50,15 @@ export class BienvenidaComponent {
       //console.log(datosDni[0]);
       sessionStorage.setItem('nodoDni', JSON.stringify(datosDni[0]));
       this.router.navigate(['dni']);
+    },
+    (error) => {
+      // Manejar el error y mostrar un Swal
+      console.error('Error en la solicitud:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un error en la solicitud. Por favor, inténtalo de nuevo.',
+      });
     });
   }
 }

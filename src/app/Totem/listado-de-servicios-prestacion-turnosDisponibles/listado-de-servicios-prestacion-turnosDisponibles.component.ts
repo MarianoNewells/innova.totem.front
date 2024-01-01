@@ -10,6 +10,8 @@ import { PrestacionDelServicio } from '../modelos/prestacionesDelServicio';
 import { TurnosCreado } from '../modelos/turnosCreado';
 import { Cobertura } from '../modelos/coberturas';
 import Swal from 'sweetalert2';
+import { PasoService } from '../servicios/PasoActualService';
+import { Observable, take } from 'rxjs';
 
 @Component({
   selector: 'app-listado-de-servicios-prestacion-turnosDisponibles',
@@ -19,7 +21,6 @@ import Swal from 'sweetalert2';
 
 export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
 
-  titulosPantalla: string[] = ["Seleccione un servicio", "Seleccione una prestación", "Seleccione un turno"];
   persona: Persona = new Persona();
   nombreCompleto: string = '';
   dni: string = '';
@@ -35,13 +36,17 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
 
   //Variables para transportar entre funciones
   idServicioSeleccionado: string = '';
-    //Variables para transportar entre funciones
+  //Variables para transportar entre funciones
+
+  pasoActual$: Observable<number> | any;
+  
   constructor(
     private api: ApisBackEndService,
     private router: Router,
     private alert: AlertService,
     private http: HttpClient,
     private modalService: NgbModal,
+    public pasoService: PasoService
   ) {
     // const dato_ = sessionStorage.getItem('nodoListaDeCoberturas');
     // if (dato_) {
@@ -93,17 +98,41 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
   ngOnInit(): void {
     this.mostrarHora();
     this.obtenerServicios();
+
+  // Recuperar datos de sessionStorage
+  const serviciosFromStorage = JSON.parse(sessionStorage.getItem('servicios') || '[]');
+  const prestacionesFromStorage = JSON.parse(sessionStorage.getItem('prestaciones') || '[]');
+  const turnosFromStorage = JSON.parse(sessionStorage.getItem('turnos') || '[]');
+
+  // Asignar datos a las variables existentes
+  this.servicios = serviciosFromStorage;
+  this.prestaciones = prestacionesFromStorage;
+  this.turnos = turnosFromStorage;
+
+    this.pasoActual$ = this.pasoService.obtenerPasoActualObservable();
   }
 
-    pasoActual = 1; // Paso inicial
 
-    irAlPaso(paso: number) {
-      this.pasoActual = paso;
+  getTituloSegunPaso(pasoActual: number): string {
+    switch (pasoActual) {
+      case 1:
+        return 'Paso 1: Seleccione un servicio';
+      case 2:
+        return 'Paso 2: Seleccione una prestación';
+      case 3:
+        return 'Paso 3: Seleccione un turno';
+      default:
+        return 'Título por defecto';
     }
+  }
+
+  irAlPaso(paso: number) {
+    this.pasoService.actualizarPasoActual(paso);
+    console.log("estoy en el paso " + paso)
+  }
 
   seleccionarServicio(servicio: Servicios) {
     this.obtenerPrestacionesDelServicio(servicio.idServicio);
-    this.titulosPantalla[1] = servicio.Nombre;
     this.idServicioSeleccionado = servicio.idServicio.toString();
     this.irAlPaso(2);
   }
@@ -111,7 +140,6 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
   seleccionarPrestacion(prestacion: PrestacionDelServicio) {
     this.obtenerTurnosDisponibles(this.idServicioSeleccionado, prestacion._Id)
     this.idPrestacion = prestacion._Id
-    this.titulosPantalla[2] = prestacion._Nombre;
     this.irAlPaso(3);
   }
 
@@ -163,9 +191,7 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
     this.api.getServicios(this.idCentroDeAtencion).subscribe((response: any) => {
       if (response && response.Servicios && response.Servicios.length > 0) {
         this.servicios = response.Servicios;
-        this.titulosPantalla[0] = 'Seleccione un servicio';
-      } else {
-        this.titulosPantalla[0] = 'No hay servicios disponibles';
+        sessionStorage.setItem('servicios', JSON.stringify(this.servicios));
       }
     });
   }
@@ -175,9 +201,9 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
       if (response && response.Prestaciones && response.Prestaciones.length > 0) {
         console.log("Soy los Prestaciones")
         this.prestaciones = response.Prestaciones;
+        sessionStorage.setItem('prestaciones', JSON.stringify(this.prestaciones));
       } else {
         this.prestaciones = [];
-        this.titulosPantalla[1] = 'No hay prestaciones disponibles';
       }
     });
   }
@@ -187,9 +213,9 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
       console.log(response)
       if (response && response.Turnos && response.Turnos.length > 0) {
         this.turnos = response.Turnos;
+        sessionStorage.setItem('turnos', JSON.stringify(this.turnos));
       } else {
         this.turnos = [];
-        this.titulosPantalla[2] = 'No hay turnos disponibles';
       }
     });
   }
@@ -202,16 +228,33 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
       this.hora = new Date();
     }, 1000);
   }
-  
   volver() {
-    if (this.pasoActual === 1) {
-      this.router.navigate(['listaDeCoberturas']);
-    } else if (this.pasoActual === 2) {
-      this.irAlPaso(1);
-    } else if (this.pasoActual === 3) {
-      this.irAlPaso(2);
-    }
+    this.pasoService.obtenerPasoActualObservable().pipe(take(1)).subscribe({
+      next: (pasoActual: number) => {
+        if (pasoActual === 1) {
+          this.router.navigate(['listaDeCoberturas']);
+          console.log("Voy al lista");
+          sessionStorage.removeItem('servicios');
+        } else if (pasoActual === 2) {
+          console.log("Voy al paso 1");
+          this.irAlPaso(1);
+          sessionStorage.removeItem('prestaciones');
+        } else if (pasoActual === 3) {
+          console.log("Voy al paso 2");
+          this.irAlPaso(2);
+          sessionStorage.removeItem('turnos');
+        }
+      },
+      error: (error) => {
+        console.error('Error al obtener el paso actual:', error);
+      }
+    });
   }
+  
+  
+  
+  
+  
   
   salir(){
     this.router.navigate(['/']);
