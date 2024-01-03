@@ -12,6 +12,7 @@ import { Cobertura } from '../modelos/coberturas';
 import Swal from 'sweetalert2';
 import { PasoService } from '../servicios/PasoActualService';
 import { Observable, take } from 'rxjs';
+import { NodoHijo } from '../modelos/nodosHijos';
 
 @Component({
   selector: 'app-listado-de-servicios-prestacion-turnosDisponibles',
@@ -32,7 +33,13 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
   idFinanciador : number=0
   idPlan: number=0
   idPrestacion:number=0
-
+  tituloServicio:string=""
+  tituloPrestaciones:string=""
+  tituloTurnos:string=""
+  tituloPantalla:string=""
+  nodoServicios: NodoHijo = new NodoHijo();
+  nodoPrestaciones: NodoHijo = new NodoHijo();
+  nodoTurnos: NodoHijo = new NodoHijo();
 
   //Variables para transportar entre funciones
   idServicioSeleccionado: string = '';
@@ -48,12 +55,23 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
     private modalService: NgbModal,
     public pasoService: PasoService
   ) {
-    // const dato_ = sessionStorage.getItem('nodoListaDeCoberturas');
-    // if (dato_) {
-    //   this.nodoListaDeCoberturas = JSON.parse(dato_);
-    //   this.tituloPantalla = this.nodoListaDeCoberturas._Nombre;
-    //   // console.log('Lista de turnos:', this.nodoListaDeTurnos._Id);
-    // }
+      const dato_ = sessionStorage.getItem('nodoServicios');
+      if (dato_) {
+        this.nodoServicios = JSON.parse(dato_);
+        this.tituloServicio = this.nodoServicios._Nombre;
+        this.tituloPantalla = this.tituloServicio
+        this.api.getNodosHijos(this.nodoServicios._Id).subscribe((datosPrestaciones) => {
+          sessionStorage.setItem('nodoPrestaciones', JSON.stringify(datosPrestaciones[0]));
+          this.nodoPrestaciones = datosPrestaciones[0]
+          this.tituloPrestaciones=this.nodoPrestaciones._Nombre
+          this.api.getNodosHijos(this.nodoPrestaciones._Id).subscribe((datosTurnos) => {
+            sessionStorage.setItem('nodoTurnos', JSON.stringify(datosTurnos[0]));
+            this.nodoTurnos = datosTurnos[0]
+            this.tituloTurnos=this.nodoTurnos._Nombre
+          })
+        })
+      }
+    
     const datoPersona = sessionStorage.getItem('Persona');
     if (datoPersona) {
       this.persona = JSON.parse(datoPersona);
@@ -112,17 +130,19 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
     this.pasoActual$ = this.pasoService.obtenerPasoActualObservable();
   }
 
-
   getTituloSegunPaso(pasoActual: number): string {
     switch (pasoActual) {
       case 1:
-        return 'Paso 1: Seleccione un servicio';
+        this.tituloPantalla = this.tituloServicio
+        return '';
       case 2:
-        return 'Paso 2: Seleccione una prestación';
+        this.tituloPantalla = this.tituloPrestaciones
+        return '';
       case 3:
-        return 'Paso 3: Seleccione un turno';
+        this.tituloPantalla = this.tituloTurnos
+        return '';
       default:
-        return 'Título por defecto';
+        return '';
     }
   }
 
@@ -250,12 +270,7 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
       }
     });
   }
-  
-  
-  
-  
-  
-  
+       
   salir(){
     this.router.navigate(['/']);
   }

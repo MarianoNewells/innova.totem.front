@@ -54,12 +54,8 @@ export class ListaDeCoberturasComponent implements OnInit {
       // if (dato_) { 
       //   console.log("CoberturaPaciente:",JSON.parse(dato_));  
       // };
-      this.api.getNodosHijos(this.nodoListaDeCoberturas._Id).subscribe((datosPrestaciones) => {
-      sessionStorage.setItem('nodoPrestaciones', JSON.stringify(datosPrestaciones[0]));
-      const dato__ = sessionStorage.getItem('nodoPrestaciones');
-      if (dato__) { 
-        console.log("nodoPrestaciones:",JSON.parse(dato__));  
-      };
+      this.api.getNodosHijos(this.nodoListaDeCoberturas._Id).subscribe((datosServicios) => {
+      sessionStorage.setItem('nodoServicios', JSON.stringify(datosServicios[0]));
       this.router.navigate(['listadeServiciosPrestacionTurnos']);
     })
    }
