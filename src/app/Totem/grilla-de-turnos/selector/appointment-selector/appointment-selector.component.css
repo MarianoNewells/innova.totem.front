@@ -1,49 +1,64 @@
 :host {
-    display: block; /* Asegúrate de que el componente sea un bloque */
-    overflow-y: auto; /* Agrega el desplazamiento vertical */
-    max-height: 400px; /* Ajusta según sea necesario */
-    margin-right: 20px; /* Ajusta según sea necesario */
-    margin-left: 20px; /* Ajusta según sea necesario */
-    float: left; /* Ajusta según sea necesario */
-  }
+  display: block;
+  overflow-y: auto;
+  max-height: 400px;
+  margin-right: 20px;
+  margin-left: 20px;
+  position: relative;
+}
 
-.appointment-selectors-container {
-    display: flex;
-  }
-  
-  .appointment-selector {
-    border-radius: 20px;
-    overflow: hidden;
-    max-width: 300px;
-    margin-right: 20px;
-  }
-  
-  .date-header {
-    background-color: #2980b9;
-    border-radius: 15px;
-    margin-bottom: 10px;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-    font-size: 18px;
-  }
-  
-  .time-slot {
-    border: 1px solid #2980b9;
-    border-radius: 15px;
-    margin-bottom: 10px;
-    overflow: hidden;
-  }
-  
-  .time-slot:hover {
-    background-color: #669abd;
-  }
-  
-  .time-slot-content {
-    padding: 20px;
-    font-size: 160%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
+.date-header-container {
+  display: flex;
+  flex-direction: row;
+  position: sticky;
+  top: 0;
+
+  z-index: 2; /* Asegura que el encabezado esté por encima de los contenedores de citas */
+}
+
+.date-selector {
+  margin-right: 20px;
+}
+
+.date-header {
+  background-color: #2980b9;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  color: #fff;
+  padding: 19px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.time-slots-container {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto; /* Asegura un único scroll horizontal */
+}
+
+.appointment-selector {
+  border-radius: 20px;
+  overflow: hidden;
+  max-width: 300px;
+  margin-right: 20px;
+}
+
+.time-slot {
+  border: 1px solid #2980b9;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.time-slot:hover {
+  background-color: #669abd;
+}
+
+.time-slot-content {
+  padding: 20px;
+  padding-inline: 50px;
+  font-size: 160%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

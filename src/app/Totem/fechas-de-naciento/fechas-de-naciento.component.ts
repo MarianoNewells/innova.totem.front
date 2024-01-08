@@ -71,29 +71,21 @@ export class FechasDeNacientoComponent implements OnInit, AfterViewInit {
         }
       });
   }
-  onClickFecha(event: Event) {
-    let fecha = (event.target as HTMLElement).getAttribute('data-fecha');
-    if (fecha == this.persona._fechaNacimiento) {
-      // Buscar la siguiente pantalla.
-      this.api
-        .getNodosHijos(this.nodoFechasDeNacimiento._Id)
-        .subscribe((datos) => {
-          sessionStorage.setItem(
-            'nodoSeleccionDeTramite',
-            JSON.stringify(datos[0])
-          );
-          this.router.navigate(['seleccionDeTramite']);
-        });
-    } else {
-      // console.log('Fecha del evento', fecha);
-      // console.log('Fecha del objeto', this.persona._fechaNacimiento);
-      this.alert.mostrarAlerta(
-        'La fecha seleccionada es inválida',
-        AlertType.Danger,
-        3
+ onClickFecha(fecha: string) {
+  if (fecha === this.persona._fechaNacimiento) {
+    this.api
+    .getNodosHijos(this.nodoFechasDeNacimiento._Id)
+    .subscribe((datos) => {
+      sessionStorage.setItem(
+        'nodoSeleccionDeTramite',
+        JSON.stringify(datos[0])
       );
-    }
+      this.router.navigate(['seleccionDeTramite']);
+    });
+  } else {
+    this.alert.mostrarAlerta('La fecha seleccionada es inválida', AlertType.Danger, 3);
   }
+}
   volver() {
     this.router.navigate(['dni']);
   }
