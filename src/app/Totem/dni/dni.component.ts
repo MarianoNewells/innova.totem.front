@@ -23,7 +23,7 @@ export class DniComponent implements OnInit {
   ) {
     this.numeros = new FormGroup({
       numero: new FormControl('37316195'),
-    //  numero: new FormControl('22896758'),
+     //numero: new FormControl('22896758'),
     });
     this.radios = new FormGroup({
       radio: new FormControl('DNI'),

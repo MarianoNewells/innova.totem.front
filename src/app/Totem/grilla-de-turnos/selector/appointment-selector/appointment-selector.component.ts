@@ -116,10 +116,10 @@ export class AppointmentSelectorComponent implements OnInit {
     if(d){
       this.idPrestacion = Number(JSON.parse(d))
     }
-    d = sessionStorage.getItem('idPlan');
-    if(d){
-      this.idPlan = Number(JSON.parse(d))
-    } 
+    // d = sessionStorage.getItem('idPlan');
+    // if(d){
+    //   this.idPlan = Number(JSON.parse(d))
+    // } 
   }
 
   capitalizeFirstLetter(text: string): string {
@@ -155,6 +155,7 @@ export class AppointmentSelectorComponent implements OnInit {
             AlertType.Success,
             4
           );
+          this.router.navigate(['/']);
         }
       })
     }

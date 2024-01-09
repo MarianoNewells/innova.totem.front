@@ -120,7 +120,7 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
     this.idServicioSeleccionado = sessionStorage.getItem('idServicioSeleccionado') ?? '';
     
     this.idPrestacion = JSON.parse(sessionStorage.getItem('idPrestacion') || '0');
-    this.idPlan = JSON.parse(sessionStorage.getItem('idPlan') || '0');
+    //this.idPlan = JSON.parse(sessionStorage.getItem('idPlan') || '0');
 
   // Recuperar datos de sessionStorage
   const serviciosFromStorage = JSON.parse(sessionStorage.getItem('servicios') || '[]');
@@ -197,6 +197,7 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
             AlertType.Success,
             4
           );
+          this.router.navigate(['/']);
         }
       })
     }

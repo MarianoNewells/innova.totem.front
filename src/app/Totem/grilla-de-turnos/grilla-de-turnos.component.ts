@@ -55,9 +55,6 @@ export class GrillaDeTurnosComponent implements OnInit  {
     private modalService: NgbModal,
     private pasoActualService: PasoService){
 
-      
-      
-
       const dCobertura = sessionStorage.getItem('CoberturaPaciente');
 
       if (dCobertura) {
@@ -107,10 +104,10 @@ export class GrillaDeTurnosComponent implements OnInit  {
     if(d){
       this.idPrestacion = Number(JSON.parse(d))
     }
-    d = sessionStorage.getItem('idPlan');
-    if(d){
-      this.idPlan = Number(JSON.parse(d))
-    } 
+    // d = sessionStorage.getItem('idPlan');
+    // if(d){
+    //   this.idPlan = Number(JSON.parse(d))
+    // } 
   }
 
 
