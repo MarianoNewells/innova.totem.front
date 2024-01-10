@@ -20,6 +20,7 @@ import { default as conf } from 'src/assets/config.json';
 import { RecepcionExitosaComponent } from '../recepcion-exitosa/recepcion-exitosa.component';
 import { RecepcionNoExitosaComponent } from '../recepcion-no-exitosa/recepcion-no-exitosa.component';
 import Swal from 'sweetalert2';
+import {utils}from "src/assets/ts/utils";
 
 
 @Component({
@@ -41,6 +42,7 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
   numeros: FormGroup;
   pdfurl: string = '';
   modalRef:any
+  utils:utils=new utils() 
   constructor(
     private api: ApisBackEndService,
     private router: Router,
@@ -138,7 +140,7 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
       el.click();
       this.api.getTicketRecepcionista(this.turno.idTurno).subscribe((data)=>{
         if(data.Exito){
-          var blob = new Blob([this._base64ToArrayBuffer(data.ReporteTicketRecepcionistaString)], {
+          var blob = new Blob([this.utils._base64ToArrayBuffer(data.ReporteTicketRecepcionistaString)], {
             type: 'application/pdf',
           });
           this.pdfurl = URL.createObjectURL(blob);
@@ -189,7 +191,7 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
         //Disparar proceso de autorecepcion.
         this.api.getAutorecepcion(this.turno.idTurno, token).subscribe((data) => {
           if (data.Exito) {
-          var blob = new Blob([this._base64ToArrayBuffer(data.ReporteTicketString)], {
+          var blob = new Blob([this.utils._base64ToArrayBuffer(data.ReporteTicketString)], {
             type: 'application/pdf',
           });
           this.pdfurl = URL.createObjectURL(blob);
@@ -251,16 +253,7 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
     //     //this.router.navigate(['/']);
     //   });
   }
-
-  _base64ToArrayBuffer(base64: string) {
-    const binary_string = window.atob(base64);
-    const len = binary_string.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      bytes[i] = binary_string.charCodeAt(i);
-    }
-    return bytes.buffer;
-  }
+ 
 
   volver() {
     this.router.navigate(['seleccionDeTramite']);

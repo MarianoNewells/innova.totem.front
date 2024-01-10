@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { PasoService } from '../servicios/PasoActualService';
 import { Observable, take } from 'rxjs';
 import { NodoHijo } from '../modelos/nodosHijos';
+import {utils} from "src/assets/ts/utils";
 
 @Component({
   selector: 'app-listado-de-servicios-prestacion-turnosDisponibles',
@@ -40,7 +41,7 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
   nodoServicios: NodoHijo = new NodoHijo();
   nodoPrestaciones: NodoHijo = new NodoHijo();
   nodoTurnos: NodoHijo = new NodoHijo();
-
+  utils:utils=new utils() 
   //Variables para transportar entre funciones
   idServicioSeleccionado: string = '';
   //Variables para transportar entre funciones
@@ -178,8 +179,8 @@ export class ListadoDeServiciosPrestacionTurnosDisponiblesComponent {
     // this.idPrestacion 
     // this.idServicioSeleccionado
     Swal.fire({
-      title: "Asinación de turno",
-      text: "¿Confirma la asignación del nuevo turno?",
+      title: "Asignación de turno", 
+      text: "¿Confirma su nuevo turno con "+this.utils.capitalizeFirstLetter(this.turnos[index].NombreRecurso) + " el " + this.turnos[index].FechaConDia + " a las " + this.turnos[index].HoraTurno+"?",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Aceptar",

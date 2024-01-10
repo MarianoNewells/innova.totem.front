@@ -9,6 +9,7 @@ import { Persona } from '../modelos/dni';
 import { Estudio, Estudios } from '../modelos/estudios';
 import { ModalInformeComponent } from '../modales/modal-informe/modal-informe.component';
 import { RecepcionRetirarEstudioComponent } from '../recepcion-retirar-estudio/recepcion-retirar-estudio.component';
+import {utils}from "src/assets/ts/utils";
 
 @Component({
   selector: 'app-lista-de-estudios',
@@ -25,6 +26,7 @@ export class ListaDeEstudiosComponent implements OnInit{
   estudio: Estudio = new Estudio();
   modalRef:any
   idPersona:number=0
+  utils:utils=new utils() 
   constructor( private api: ApisBackEndService,
     private router: Router,
     private alert: AlertService,
@@ -72,7 +74,7 @@ export class ListaDeEstudiosComponent implements OnInit{
     const idCentroDeAtencion = Number(sessionStorage.getItem('idCentroDeAtencion'));
     const nombreEstudio = this.estudios.Estudios[index].NombreEstudio
     this.api.getInforme(idEstudio,idCentroDeAtencion,this.idPersona).subscribe((data)=>{
-      var blob = new Blob([this._base64ToArrayBuffer(data.Ticket)], {
+      var blob = new Blob([this.utils._base64ToArrayBuffer(data.Ticket)], {
         type: 'application/pdf',
       });
       
@@ -103,16 +105,6 @@ export class ListaDeEstudiosComponent implements OnInit{
       //   this.modalRef.close()
       // }, 60000);
     })
-  }
-
-  _base64ToArrayBuffer(base64: string) {
-    const binary_string = window.atob(base64);
-    const len = binary_string.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      bytes[i] = binary_string.charCodeAt(i);
-    }
-    return bytes.buffer;
   }
 
   hora: any;

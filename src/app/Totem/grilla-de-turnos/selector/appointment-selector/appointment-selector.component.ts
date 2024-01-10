@@ -9,6 +9,7 @@ import { TurnosCreado } from "src/app/Totem/modelos/turnosCreado";
 import { AlertService, AlertType } from "src/app/Totem/servicios/alert.service";
 import { ApisBackEndService } from "src/app/Totem/servicios/apis-back-end.service";
 import Swal from "sweetalert2";
+import {utils}from "src/assets/ts/utils";
 
 export interface IDia {
   FechaTurno: string;
@@ -46,7 +47,7 @@ export class AppointmentSelectorComponent implements OnInit {
   idPrestacion:number=0
   idPlan:number=0
   idFinanciador : number=0
-
+  utils:utils=new utils() 
 
   turno:TurnosCreado=new TurnosCreado
   
@@ -122,12 +123,6 @@ export class AppointmentSelectorComponent implements OnInit {
     // } 
   }
 
-  capitalizeFirstLetter(text: string): string {
-    return text.toLowerCase().replace(/(?:^|\s)\w/g, function (match) {
-      return match.toUpperCase();
-    });
-  }
-
   asignarNuevoTurno(idturno: number, horario: any){
     // this.turnos[index].IdTurno
     // this.turnos[index].IdRecurso 
@@ -137,9 +132,10 @@ export class AppointmentSelectorComponent implements OnInit {
     // this.idPlan 
     // this.idPrestacion 
     // this.idServicioSeleccionado
+
     Swal.fire({
-      title: "Asinación de turno \n"+ this.capitalizeFirstLetter(this.turno.NombreRecurso) +  " a las " + horario,
-      text: "¿Confirma la asignación del nuevo turno?",
+      title: "Asignación de turno", 
+      text: "¿Confirma su nuevo turno con "+this.utils.capitalizeFirstLetter(this.turno.NombreRecurso) + " el " + this.turno.FechaConDia + " a las " + horario+"?",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Aceptar",
