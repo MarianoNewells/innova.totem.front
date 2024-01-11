@@ -9,7 +9,7 @@ import { Persona } from '../modelos/dni';
 import { Estudio, Estudios } from '../modelos/estudios';
 import { ModalInformeComponent } from '../modales/modal-informe/modal-informe.component';
 import { RecepcionRetirarEstudioComponent } from '../recepcion-retirar-estudio/recepcion-retirar-estudio.component';
-import {utils}from "src/assets/ts/utils";
+import { utils } from 'src/assets/ts/utils';
 
 @Component({
   selector: 'app-lista-de-estudios',

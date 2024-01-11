@@ -47,16 +47,18 @@
         ></app-appointment-selector>
         
           
-          <button #btnAvanzar class="button-styling button-avanzar" [disabled]="false" (click)="mostrarSiguientesFechas()">
-            <i class="fa fa-chevron-right align-middle fa-lg"></i>
+          <button #btnAvanzar class="button-styling button-avanzar" [disabled]="!avanceHabilitado" (click)="mostrarSiguientesFechas()">
+            <i *ngIf="avanceHabilitado" class="fa fa-chevron-right align-middle fa-lg"></i>
+            <i *ngIf="!avanceHabilitado" class="fa fa-times align-middle fa-lg"></i>
           </button>
         </div>
 
-        <footer class="fixed-bottom d-flex justify-content-end p-2 py-xl-5 mx-auto" style="max-width: 1200px">
+        <footer class="fixed-bottom d-flex justify-content-end p-2 py-xl-5 mx-auto" style="max-width: 1400px;">
           <div class="btn-totem-back pointer d-flex align-items-center">
             <i class="fa fa fa-power-off mr-3" aria-hidden="true" (click)="salir()"></i> Salir
           </div>
         </footer>
+
         <!--Fin footer-->
         <div class="modal fade" id="modal-confirmacion-requisitos">
           <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -96,11 +98,6 @@
             </div>
           </div>
         </div>
-
-
-
-
-
       </div>
     </div>
   </div>

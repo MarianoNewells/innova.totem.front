@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 import { PasoService } from '../servicios/PasoActualService';
 import { Observable, take } from 'rxjs';
 import { NodoHijo } from '../modelos/nodosHijos';
-import {utils} from "src/assets/ts/utils";
+import { utils } from '../../../assets/ts/utils'; 
 
 @Component({
   selector: 'app-listado-de-servicios-prestacion-turnosDisponibles',

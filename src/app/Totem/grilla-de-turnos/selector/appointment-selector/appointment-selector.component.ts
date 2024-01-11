@@ -9,7 +9,7 @@ import { TurnosCreado } from "src/app/Totem/modelos/turnosCreado";
 import { AlertService, AlertType } from "src/app/Totem/servicios/alert.service";
 import { ApisBackEndService } from "src/app/Totem/servicios/apis-back-end.service";
 import Swal from "sweetalert2";
-import {utils}from "src/assets/ts/utils";
+import { utils } from "src/assets/ts/utils";
 
 export interface IDia {
   FechaTurno: string;

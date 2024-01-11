@@ -24,7 +24,8 @@ import { Observable, of } from 'rxjs';
 })
 
 export class GrillaDeTurnosComponent implements OnInit  {
-  public retrocesoHabilitado: boolean = false;
+  retrocesoHabilitado: boolean = false;
+  avanceHabilitado: boolean = true;
 
   modalRef:any
   pdfurl: string = '';
@@ -121,6 +122,7 @@ export class GrillaDeTurnosComponent implements OnInit  {
     this.mesActivo = this.getMesesPresentes(this.todasLasFechas);
 
     this.retrocesoHabilitado = false;
+    this.avanceHabilitado = true
   }
   
   cargarFechas(): void {
@@ -215,6 +217,7 @@ export class GrillaDeTurnosComponent implements OnInit  {
 
       // Habilitar el botón de retroceso solo después de avanzar a la segunda semana
       this.retrocesoHabilitado = this.indiceMostrar >= 2 * cantidadDiasAMostrar;
+      this.avanceHabilitado = this.indiceMostrar + cantidadDiasAMostrar <= this.todasLasFechas.length
 
       this.mesActivo = this.getMesesPresentes(nuevasFechas);
     }
@@ -233,13 +236,14 @@ export class GrillaDeTurnosComponent implements OnInit  {
   
       // Actualizar el estado del botón de retroceso
       this.retrocesoHabilitado = this.indiceMostrar >= cantidadDiasAMostrar;
+      this.avanceHabilitado = this.indiceMostrar + cantidadDiasAMostrar <= this.todasLasFechas.length
     } else {
       // Si ya estamos en el inicio, retroceder para mostrar los últimos 7 días
       this.mostrarUltimosDias();
-  
+      
       // Actualiza los meses presentes
       this.mesActivo = this.getMesesPresentes(this.todasLasFechas);
-  
+      
       // Actualizar el estado del botón de retroceso
       this.retrocesoHabilitado = false;
     }
