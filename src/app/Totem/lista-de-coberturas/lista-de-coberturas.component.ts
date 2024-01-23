@@ -23,7 +23,6 @@ export class ListaDeCoberturasComponent implements OnInit {
       if (dato_) {
         this.nodoListaDeCoberturas = JSON.parse(dato_);
         this.tituloPantalla = this.nodoListaDeCoberturas._Nombre;
-        // console.log('Lista de turnos:', this.nodoListaDeTurnos._Id);
       }
       const datoPersona = sessionStorage.getItem('Persona');
       if (datoPersona) {
@@ -51,9 +50,6 @@ export class ListaDeCoberturasComponent implements OnInit {
     seleccionCobertura(index:number){
       sessionStorage.setItem('CoberturaPaciente', JSON.stringify(this.coberturas.Coberturas[index]));
       const dato_ = sessionStorage.getItem('CoberturaPaciente');
-      // if (dato_) { 
-      //   console.log("CoberturaPaciente:",JSON.parse(dato_));  
-      // };
       this.api.getNodosHijos(this.nodoListaDeCoberturas._Id).subscribe((datosServicios) => {
       sessionStorage.setItem('nodoServicios', JSON.stringify(datosServicios[0]));
       this.router.navigate(['listadeServiciosPrestacionTurnos']);

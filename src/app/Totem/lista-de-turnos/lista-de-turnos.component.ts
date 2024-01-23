@@ -14,13 +14,11 @@ import { Turno, Turnos } from '../modelos/turnos';
 import { FormControl, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalTicketComponent } from '../modales/modal-ticket/modal-ticket.component';
-import * as FileSaver from 'file-saver';
-import { default as conf } from 'src/assets/config.json';
 import { RecepcionExitosaComponent } from '../recepcion-exitosa/recepcion-exitosa.component';
 import { RecepcionNoExitosaComponent } from '../recepcion-no-exitosa/recepcion-no-exitosa.component';
 import Swal from 'sweetalert2';
 import {utils}from "src/assets/ts/utils";
+import { Cobertura } from '../modelos/coberturas';
 
 
 @Component({
@@ -42,7 +40,8 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
   numeros: FormGroup;
   pdfurl: string = '';
   modalRef:any
-  utils:utils=new utils() 
+  utils:utils=new utils()
+  cobertura:Cobertura=new Cobertura() 
   constructor(
     private api: ApisBackEndService,
     private router: Router,
@@ -54,7 +53,14 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
       token: new FormControl(''),
     });
 
-    const dato_ = sessionStorage.getItem('nodoListaDeTurnos');
+    let dato_:any
+
+    dato_ = sessionStorage.getItem('CoberturaPaciente');
+    if (dato_) {
+      this.cobertura=dato_
+    }
+
+    dato_ = sessionStorage.getItem('nodoListaDeTurnos');
     if (dato_) {
       this.nodoListaDeTurnos = JSON.parse(dato_);
       this.tituloPantalla = this.nodoListaDeTurnos._Nombre;
@@ -134,7 +140,7 @@ export class ListaDeTurnosComponent implements OnInit, AfterViewInit {
   // Se ejecuta por el click en el botón "seleccionar" y deja seteado el turno.
   autorecepcion(index: number) {
     this.turno = this.turnos.Turnos[index];
-    if(!this.turno.AceptaAutogestion){
+    if(!this.turno.AceptaAutogestion && !this.cobertura.Financiador._requiereTokenParaAutorizacion){
        // Cerrar el modal del token.
       let el: HTMLElement = this.CloseModalToken.nativeElement;
       el.click();
